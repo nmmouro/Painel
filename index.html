@@ -191,12 +191,16 @@ main{
   display:grid;
   gap:12px;
   height:calc(100vh - 120px);
+  width:100%;
+  box-sizing:border-box;
   overflow:auto;
   text-align:center;
+  grid-template-columns:1fr;
 }
   
 
 .card{
+  width:100%;
   background:var(--card);
   border-radius:16px;
   border:2px solid rgba(255,255,255,.08);
@@ -218,6 +222,14 @@ main{
   color:#6b7280;
 }
 
+  table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+section.card{
+  overflow-x:auto;
+}
 
 
 /* === Esse bloco controla o comportamento e aparência do cabeçalho da tabela === */

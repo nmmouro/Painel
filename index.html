@@ -672,10 +672,12 @@ firstLoad = false;
 
   }
 
-      
-  catch(e){
-    console.error(e);
-  }
+ catch(e){
+
+  console.error("Erro geral:", e);
+
+  alert("Falha ao carregar dados da planilha.");
+}
 }
 
 function atualizarStatusEmpregados(gvizPainel){

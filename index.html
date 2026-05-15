@@ -651,7 +651,7 @@ firstLoad = false;
     renderTable("agenda", results[1]);
     renderTable("social", results[2]);
 
-  
+    enableColumnResize();
 
     atualizarStatusEmpregados(results[0]);
 
@@ -772,7 +772,6 @@ function enableColumnResize(){
 
 loadAll();
 
-enableColumnResize();
 updateSoundButton();
 setInterval(loadAll, 30000);
 </script>

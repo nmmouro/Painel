@@ -657,7 +657,18 @@ async function loadAll(){
       playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
     }
 
+firstLoad = false;
+    lastDataHash = currentHash;
 
+    renderTable("painel", results[0]);
+    renderTable("agenda", results[1]);
+    renderTable("social", results[2]);
+
+  
+
+    atualizarStatusEmpregados(results[0]);
+
+  }
 
       
   catch(e){
@@ -771,10 +782,6 @@ function enableColumnResize(){
   
 
 loadAll();
-
-renderTable("painel", results[0]);
-renderTable("agenda", results[1]);
-renderTable("social", results[2]);
 
 enableColumnResize();
 

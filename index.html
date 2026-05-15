@@ -580,9 +580,25 @@ function renderTable(id, g){
   const headers = TABLE_HEADERS[id] || [];
   const rows = g.table.rows;
 
-  let h="<table><thead><tr>";
-  headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
-  h+="</tr></thead><tbody>";
+  
+
+ let h = "<table><thead><tr>";
+
+headers.forEach((c,i)=>{
+
+  const width =
+    COLUMN_WIDTHS[id]?.[i] || "auto";
+
+  h += `
+    <th style="width:${width}">
+      ${escapeHtml(c)}
+    </th>
+  `;
+});
+
+  
+
+h += "</tr></thead><tbody>";
 
  rows.forEach(r=>{
   const cells = r.c || [];

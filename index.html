@@ -46,52 +46,122 @@ html,body{
   color:#00ff9c;
 }
 
+/* ================= HEADER ================= */
+
+header{
+  display:grid;
+
+  grid-template-columns:
+    180px
+    1fr
+    260px;
+
+  align-items:center;
+
+  gap:16px;
+
+  padding:12px 20px;
+
+  background:#020617;
+
+  border-radius:10px;
+  border:1px solid #ffffff;
+}
+
+/* 🔹 ESQUERDA */
+.header-left{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+.logo{
+  height:65px;
+  max-width:100%;
+  object-fit:contain;
+}
+
+/* 🔹 CENTRO */
+.header-center{
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+}
+
+.title{
+  font-size:30px;
+  font-weight:700;
+  color:var(--accent);
+
+  line-height:1.2;
+}
+
+#status-empregados{
+  margin-top:8px;
+}
+
+/* 🔹 DIREITA */
+.header-right{
+  display:flex;
+  flex-direction:column;
+
+  align-items:flex-end;
+  justify-content:center;
+
+  gap:8px;
+}
+
+.clock{
+  font-size:24px;
+  font-weight:700;
+  color:var(--muted);
+}
+
+.buttons-row{
+  display:flex;
+  gap:8px;
+}
+
 /* ================= MOBILE ================= */
 
 @media (max-width: 768px){
 
   header{
-    grid-template-columns:180px 1fr 260px;;
+    grid-template-columns:1fr;
+
     text-align:center;
-    padding:12px 20px;
-    background:#020617;
-    border-radius:10px;
-    border:1px solid #ffffff;
-    gap:16px;
+
+    padding:12px;
+
+    gap:12px;
   }
 
   .header-left,
   .header-center,
   .header-right{
     justify-content:center;
-    align-items:flex-end;
-    gap:8px;
-    display:flex;
+    align-items:center;
   }
 
   .logo{
-    height:20px;
-    max-width:10%;
-    object-fit:contain;
+    height:50px;
   }
 
   .title{
     font-size:22px;
-    font-weight:700;
-    color:var(--accent);
-    line-height:1.2;
   }
 
   .clock{
     font-size:18px;
-    font-weight:700;
-    color:var(--muted);
   }
 
   .buttons-row{
     flex-wrap:wrap;
     justify-content:center;
-    gap:8px;
   }
 
   #toggle-audio,
@@ -99,13 +169,7 @@ html,body{
     font-size:12px;
     padding:6px 10px;
   }
-
-
-  #status-empregados{
-  margin-top:8px;
 }
-}
-
 .card{
   background:var(--card);
   border-radius:16px;

@@ -230,6 +230,29 @@ thead th{
   padding:12px;
 }
 
+  /* ================= RESIZER ================= */
+
+th{
+  position:relative;
+}
+
+.resizer{
+  position:absolute;
+  top:0;
+  right:-4px;
+  width:10px;
+  height:100%;
+  cursor:col-resize;
+  z-index:100;
+  background:transparent;
+}
+
+.resizer:hover{
+  background:rgba(255,255,255,.25);
+}
+  
+/* ======================================== */
+  
 td.status-icon{
   width:50px;
   font-size:20px;
@@ -634,17 +657,10 @@ async function loadAll(){
       playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
     }
 
-    firstLoad = false;
-    lastDataHash = currentHash;
 
-    renderTable("painel", results[0]);
-    renderTable("agenda", results[1]);
-    renderTable("social", results[2]);
 
-// ✅ NOVO
-atualizarStatusEmpregados(results[0]);
-
-  }catch(e){
+      
+  catch(e){
     console.error(e);
   }
 }
@@ -687,7 +703,83 @@ function atualizarStatusEmpregados(gvizPainel){
   el.innerHTML = html;
 }
 
+/* ================= RESIZE COLUNAS ================= */
+
+function enableColumnResize(){
+
+  document.querySelectorAll("th").forEach(th=>{
+
+    // evita duplicar resizer
+    if(th.querySelector(".resizer")) return;
+
+    const resizer = document.createElement("div");
+    resizer.classList.add("resizer");
+
+    th.appendChild(resizer);
+
+    let startX = 0;
+    let startWidth = 0;
+
+    resizer.addEventListener("mousedown", initResize);
+
+    function initResize(e){
+
+      startX = e.clientX;
+      startWidth = th.offsetWidth;
+
+      document.addEventListener("mousemove", resizeColumn);
+      document.addEventListener("mouseup", stopResize);
+    }
+
+    function resizeColumn(e){
+
+      const newWidth =
+        startWidth + (e.clientX - startX);
+
+      th.style.width = newWidth + "px";
+
+      // pega índice da coluna
+      const index =
+        [...th.parentElement.children].indexOf(th);
+
+      // aplica largura nas células
+      document.querySelectorAll("tbody tr").forEach(row=>{
+
+        if(row.children[index]){
+          row.children[index].style.width =
+            newWidth + "px";
+        }
+      });
+    }
+
+    function stopResize(){
+
+      document.removeEventListener(
+        "mousemove",
+        resizeColumn
+      );
+
+      document.removeEventListener(
+        "mouseup",
+        stopResize
+      );
+    }
+
+  });
+
+}
+  
+
 loadAll();
+
+renderTable("painel", results[0]);
+renderTable("agenda", results[1]);
+renderTable("social", results[2]);
+
+enableColumnResize();
+
+atualizarStatusEmpregados(results[0]);
+  
 updateSoundButton();
 setInterval(loadAll, 30000);
 </script>

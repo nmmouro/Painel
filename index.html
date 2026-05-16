@@ -384,12 +384,7 @@ tr.status-cancelado td{
     <div id="social">Carregando...</div>
   </section>
 
-  <section class="card">
-    <h2>AVISOS</h2>
-    <div id="avisos">Carregando...</div>
-  </section>
-
-</main>
+  </main>
 
 <div class="small">Atualização automática a cada 30s • Google Sheets</div>
 
@@ -402,7 +397,7 @@ const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
-  { id:"avisos", name:"AVISOS" }
+  
 ];
 
 /* ================= HEADERS ================= */
@@ -410,7 +405,7 @@ const TABLE_HEADERS = {
   painel: ["Data","Hora","Veículo","Empregado","Passageiro/ Setor/ Motivo","Itinerário","Status"],
   agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
   social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
-  avisos: ["Avisos"]
+  
 };
 
 /* ================= COLUMN WIDTHS ================= */
@@ -444,11 +439,8 @@ const COLUMN_WIDTHS = {
     "auto",
     "auto",
     "70px"
-  ],
-
-    avisos:[
-    "100%",
   ]
+  
 };
 
   
@@ -636,14 +628,8 @@ h += "</tr></thead><tbody>";
 
     cells.forEach((c,i)=>{
 
-
-
-      
-     if(id !== "avisos" && i === cells.length-1){
-
-
-
-        
+        if(i === cells.length-1){
+              
         let icon="";
         if(status.includes("concluido")||status.includes("atendido")) icon="✔";
         if(status.includes("cancelado")) icon="✖";
@@ -662,6 +648,7 @@ h += "</tr></thead><tbody>";
 }
 
 /* ================= FETCH ================= */
+  
 async function fetchSheet(tab){
   const url =
     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
@@ -672,6 +659,7 @@ async function fetchSheet(tab){
 }
 
 /* ================= LOAD ================= */
+  
 async function loadAll(){
   try{
     const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
@@ -688,8 +676,7 @@ firstLoad = false;
     renderTable("painel", results[0]);
     renderTable("agenda", results[1]);
     renderTable("social", results[2]);
-    renderTable("avisos", results[3]);
-
+    
     enableColumnResize();
 
     atualizarStatusEmpregados(results[0]);

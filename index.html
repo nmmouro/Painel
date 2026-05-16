@@ -402,7 +402,7 @@ const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
-  { id:"social", name:"AVISOS" }
+  { id:"avisos", name:"AVISOS" }
 ];
 
 /* ================= HEADERS ================= */
@@ -410,7 +410,7 @@ const TABLE_HEADERS = {
   painel: ["Data","Hora","Veículo","Empregado","Passageiro/ Setor/ Motivo","Itinerário","Status"],
   agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
   social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
-  avisos: []
+  avisos: ["Avisos"]
 };
 
 /* ================= COLUMN WIDTHS ================= */
@@ -446,7 +446,7 @@ const COLUMN_WIDTHS = {
     "70px"
   ],
 
-    social:[
+    avisos:[
     "100%",
   ]
 };
@@ -635,7 +635,15 @@ h += "</tr></thead><tbody>";
   h+=`<tr class="${cls}">`;
 
     cells.forEach((c,i)=>{
-      if(i === cells.length-1){
+
+
+
+      
+     if(id !== "avisos" && i === cells.length-1){
+
+
+
+        
         let icon="";
         if(status.includes("concluido")||status.includes("atendido")) icon="✔";
         if(status.includes("cancelado")) icon="✖";
@@ -680,6 +688,7 @@ firstLoad = false;
     renderTable("painel", results[0]);
     renderTable("agenda", results[1]);
     renderTable("social", results[2]);
+    renderTable("avisos", results[3]);
 
     enableColumnResize();
 

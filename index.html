@@ -397,6 +397,7 @@ const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
+  { id:"social", name:"AVISOS" }
 ];
 
 /* ================= HEADERS ================= */
@@ -404,6 +405,7 @@ const TABLE_HEADERS = {
   painel: ["Data","Hora","Veículo","Empregado","Passageiro/ Setor/ Motivo","Itinerário","Status"],
   agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
   social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
+  avisos: []
 };
 
 /* ================= COLUMN WIDTHS ================= */
@@ -437,6 +439,10 @@ const COLUMN_WIDTHS = {
     "auto",
     "auto",
     "70px"
+  ],
+
+    social:[
+    "100%",
   ]
 };
 
@@ -514,7 +520,7 @@ async function toggleFullscreen(){
     await document.documentElement.requestFullscreen();
 
     document.getElementById("toggle-fullscreen").innerText =
-      "🡼 SAIR DA TELA CHEIA";
+      "🡼TELA CHEIA";
 
   }else{
 

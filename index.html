@@ -225,6 +225,7 @@ main{
   table{
   width:100%;
   border-collapse:collapse;
+  table-layout:fixed;
 }
 
 section.card{
@@ -761,13 +762,16 @@ function enableColumnResize(){
         [...th.parentElement.children].indexOf(th);
 
       // aplica largura nas células
-      document.querySelectorAll("tbody tr").forEach(row=>{
+      const table = th.closest("table");
 
-        if(row.children[index]){
-          row.children[index].style.width =
-            newWidth + "px";
-        }
-      });
+     table.querySelectorAll("tbody tr").forEach(row=>{
+
+     if(row.children[index]){
+
+     row.children[index].style.width =
+      newWidth + "px";
+  }
+});
     }
 
     function stopResize(){

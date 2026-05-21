@@ -37,6 +37,8 @@ html,body{
   color:var(--text);
   font-family:Inter,Arial,sans-serif;
   overflow:hidden;
+   -webkit-text-size-adjust:none;
+  text-size-adjust:none;
 }
   .ocupado{
   background:rgba(255,77,77,0.15);
@@ -163,7 +165,7 @@ header{
 
 /* ================= MOBILE SMARTPHONE ================= */
  
-@media (max-width: 768px){
+@media screen and (max-width:768px){
 
  header{
  display:grid;
@@ -255,6 +257,9 @@ header{
  padding:6px;
  white-space:nowrap;
  font-size:8px;
+
+   font-size:7px !important;
+    padding:4px;
  }
 
  td.status-icon{
@@ -331,6 +336,9 @@ thead th{
   z-index:2;
   border:1px solid var(--border);
   padding:12px;
+
+  font-size:10px !important;
+  line-height:1.1;
 }
 
   /* ================= RESIZER ================= */

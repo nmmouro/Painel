@@ -53,13 +53,14 @@ html,body{
 /* ================= HEADER ================= */
 
 header{
-  display:grid;
+  
   grid-template-columns:
     150px
     1fr
     260px;
 
   align-items:center;
+  display:grid;
   gap:10px;
   padding:12px 20px;
   background:#020617;
@@ -75,7 +76,7 @@ header{
 }
 
 .logo{
-  height:70px;
+  height:75px;
   max-width:100%;
   object-fit:contain;
 }
@@ -161,7 +162,7 @@ header{
 
  header{
  display:grid;
- grid-template-columns:auto auto auto;
+ grid-template-columns:auto 1fr auto;
  text-align:center;
  padding:10px;
  gap:8px;

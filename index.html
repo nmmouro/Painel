@@ -442,7 +442,7 @@ const STATUS_ICONS = {
 
   atendido:"✔",
   concluido:"✔",
- 🟠 EM ANDAMENTO:"⏳",
+  andamento:"⏳",
   cancelado:"✖"
 };
 
@@ -470,8 +470,8 @@ const getStatusClass = status => {
   if(status.includes("concluido"))
     return "status-concluido";
 
-  if(status.includes("andamento"))
-    return "status-🟠 EM ANDAMENTO";
+  if(status.includes("🟠 EM ANDAMENTO"))
+    return "status-andamento";
 
   if(status.includes("atendido"))
     return "status-atendido";

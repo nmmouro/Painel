@@ -178,6 +178,19 @@ button:hover{
   transform:scale(1.03);
 }
 
+/* ================= BUTTON STATES ================= */
+
+button.off{
+
+  background:#ff4d4d;
+
+  color:#ffffff;
+
+  box-shadow:
+    0 0 10px rgba(255,77,77,.5);
+}
+
+
 /* ================= MAIN ================= */
 
 main{
@@ -303,7 +316,18 @@ tbody tr:nth-child(even) td{
     font-size:12px;
   }
 
-  #status-empregados{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:6px; } #status-empregados .badge{ font-size:8px; padding:3px 6px; border-radius:6px; }
+  #status-empregados{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px; margin-top:6px;
+  }
+  
+  #status-empregados .badge{
+    font-size:8px;
+    padding:3px 6px;
+    border-radius:6px;
+  }
 
   #clock{
     font-size:8px;
@@ -313,7 +337,11 @@ tbody tr:nth-child(even) td{
     height:20px;
   }
 
-  .actions button{ font-size:6px; padding:4px 6px; border-radius:2px; }
+  .actions button{
+    font-size:6px;
+    padding:4px 6px;
+    border-radius:2px;
+  }
 
   table{
     font-size:10px;
@@ -756,22 +784,32 @@ updateClock();
 const audio =
   document.getElementById("beep");
 
+const audioBtn =
+  document.getElementById("toggle-audio");
+
 let soundEnabled = true;
 
-document.getElementById(
-  "toggle-audio"
-).onclick = () => {
+function updateAudioButton(){
 
-  soundEnabled =
-    !soundEnabled;
+  if(soundEnabled){
 
-  document.getElementById(
-    "toggle-audio"
-  ).innerText =
+    audioBtn.innerText = "🔊 SOM";
 
-    soundEnabled
-      ? "🔊 SOM"
-      : "🔇 SOM";
+    audioBtn.classList.remove("off");
+
+  }else{
+
+    audioBtn.innerText = "🔇 SOM OFF";
+
+    audioBtn.classList.add("off");
+  }
+}
+
+audioBtn.onclick = () => {
+
+  soundEnabled = !soundEnabled;
+
+  updateAudioButton();
 };
 
 function playBeep(){
@@ -782,6 +820,8 @@ function playBeep(){
   audio.currentTime = 0;
 
   audio.play().catch(()=>{});
+
+  updateAudioButton();
 }
 
 /* ================= FULLSCREEN ================= */

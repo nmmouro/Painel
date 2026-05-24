@@ -436,18 +436,34 @@ const TABS = [
   }
 ];
 
-/* ================= STATUS ICONS ================= */
+/* ================= STATUS CONFIG ================= */
 
-const STATUS_ICONS = {
+const STATUS = {
 
-  atendido:"✔",
-  concluido:"✔",
-  andamento:"⏳",
-  cancelado:"✖"
+  atendido:{
+    icon:"✔",
+    class:"status-atendido"
+  },
+
+  concluido:{
+    icon:"✔",
+    class:"status-concluido"
+  },
+
+  andamento:{
+    icon:"⏳",
+    class:"status-andamento"
+  },
+
+  cancelado:{
+    icon:"✖",
+    class:"status-cancelado"
+  }
 };
 
 /* ================= HELPERS ================= */
 
+/* 🔹 converte resposta GViz em JSON */
 const parseGviz = txt =>
 
   JSON.parse(
@@ -457,27 +473,37 @@ const parseGviz = txt =>
     )
   );
 
+/* 🔹 extrai valor da célula */
 const getCell = c =>
   c?.f ?? c?.v ?? "";
 
-const getStatusClass = status => {
+/* 🔹 identifica chave do status */
+function getStatusKey(status=""){
 
   status = status.toLowerCase();
 
-  if(status.includes("cancelado"))
-    return "status-cancelado";
+  return Object.keys(STATUS)
+    .find(key => status.includes(key));
+}
 
-  if(status.includes("concluido"))
-    return "status-concluido";
+/* 🔹 retorna classe CSS */
+function getStatusClass(status){
 
-  if(status.includes("em andamento"))
-    return "status-andamento";
+  const key =
+    getStatusKey(status);
 
-  if(status.includes("atendido"))
-    return "status-atendido";
+  return STATUS[key]?.class || "";
+}
 
-  return "";
-};
+/* 🔹 retorna ícone */
+function getStatusIcon(status){
+
+  const key =
+    getStatusKey(status);
+
+  return STATUS[key]?.icon || "";
+}
+
 
 /* ================= FETCH ================= */
 

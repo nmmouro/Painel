@@ -549,32 +549,38 @@ function renderTable(headers, rows){
           const values =
             (row.c || []).map(getCell);
 
-          const status =
-            values.at(-1)?.toLowerCase() || "";
+          ```javascript id="oc9dtx"
+const status =
+  values.at(-1)?.toLowerCase() || "";
 
-          return `
+const rowClass =
+  getStatusClass(status);
 
-            <tr class="${getStatusClass(status)}">
+const icon =
+  getStatusIcon(status);
 
-              ${values.map((v,i)=>{
+return `
 
-                const isLast =
-                  i === values.length - 1;
+  <tr class="${rowClass}">
 
-                return `
-                  <td>
+    ${values.map((v,i)=>{
 
-                    ${isLast
-                      ? STATUS_ICONS[status] || ""
-                      : v}
+      const isLast =
+        i === values.length - 1;
 
-                  </td>
-                `;
-              }).join("")}
+      return `
+        <td>
 
-            </tr>
+          ${isLast ? icon : v}
 
-          `;
+        </td>
+      `;
+    }).join("")}
+
+  </tr>
+`;
+```
+
 
         }).join("")}
 

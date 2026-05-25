@@ -294,6 +294,17 @@ tbody tr:nth-child(even) td{
   background:rgba(255,140,0,.10);
 }
 
+  /* ================= STATUS ICON ================= */
+
+.status-icon{
+
+  font-size:24px;
+
+  font-weight:700;
+
+  text-align:center;
+}
+
 
 /* ================= MOBILE ================= */
 
@@ -446,7 +457,7 @@ const TABS = [
       "Hora",
       "Veículo",
       "Empregado",
-      "Passageiro",
+      "Passageiro/ Setor/ Motivo",
       "Itinerário",
       "Status"
     ]
@@ -623,7 +634,7 @@ return `
         i === values.length - 1;
 
       return `
-        <td>
+        <td class="${isLast ? 'status-icon' : ''}">
 
           ${isLast ? icon : v}
 

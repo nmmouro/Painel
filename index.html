@@ -27,6 +27,7 @@
   --green:#00ff9c;
   --yellow:#ffcc00;
   --red:#ff4d4d;
+  --lime:#7CFC00;
 }
 
 /* ================= RESET ================= */
@@ -196,9 +197,9 @@ button.off{
 main{
 
   display:grid;
-  gap:12px;
+  gap:14px;
 
-  padding:10px;
+  padding:12px;
 
   height:calc(100vh - 120px);
 
@@ -288,6 +289,11 @@ tbody tr:nth-child(even) td{
 .status-concluido td{
   background:rgba(124,252,0,.10);
 }
+
+.status-manutencao td{
+  background:rgba(255,140,0,.10);
+}
+
 
 /* ================= MOBILE ================= */
 
@@ -404,7 +410,7 @@ tbody tr:nth-child(even) td{
     <div class="actions">
 
       <button id="toggle-audio">
-        🔊 SOM
+        🔊 SOM ON
       </button>
 
       <button id="toggle-fullscreen">
@@ -440,7 +446,7 @@ const TABS = [
       "Hora",
       "Veículo",
       "Empregado",
-      "Passageiro/ Setor/ Motivo",
+      "Passageiro",
       "Itinerário",
       "Status"
     ]
@@ -500,12 +506,13 @@ const STATUS = {
   cancelado:{
     icon:'<span style="color:#ff4d4d">✖</span>',
     class:"status-cancelado"
-  }
+  },
 
   manutenção:{
-    icon:'<span style="color:#ff4d4d">🔧 </span>',
-    class:"status-manutenção"
+    icon:'<span style="color:#ff9800">🔧</span>',
+    class:"status-manutencao"
   }
+
 };
 
 /* ================= HELPERS ================= */
@@ -650,6 +657,16 @@ function renderEmpregados(rows){
   nomes.forEach(n => usados[n] = false);
 
   rows.forEach(r=>{
+
+    const cells =
+      (r.c || []).map(getCell);
+
+    const status =
+      String(cells.at(-1) || "")
+      .toLowerCase();
+
+    if(!status.includes("andamento"))
+      return;
 
     const text =
       JSON.stringify(r).toUpperCase();

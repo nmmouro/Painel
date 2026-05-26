@@ -453,7 +453,7 @@ const TABS = [
     id: "painel",
     title: "PAINEL",
     sheet: "PAINEL",
-    headers: ["Data","Hora","Veículo","Empregado","Motivo","Itinerário","Status"]
+    headers: ["Data","Hora","Veículo","Empregado","Passageiro/ Setor/ Motivo","Itinerário","Status"]
   },
   {
     id: "agenda",
@@ -608,7 +608,7 @@ async function loadAll() {
 
 function updateClock() {
   document.getElementById("clock").innerText =
-    new Date().toLocaleString("pt-BR", {
+    new Date().toLocaleString("pt-BR",  {
       dateStyle: "short",
       timeStyle: "short"
     });

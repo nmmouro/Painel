@@ -443,443 +443,204 @@ tbody tr:nth-child(even) td{
 
 /* ================= CONFIG ================= */
 
-const SHEET_ID =
-  "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
+const CONFIG = {
+  SHEET_ID: "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E",
+  REFRESH_INTERVAL: 30000
+};
 
 const TABS = [
-
   {
-    id:"painel",
-    title:"PAINEL",
-    sheet:"PAINEL",
-
-    headers:[
-      "Data",
-      "Hora",
-      "Veículo",
-      "Empregado",
-      "Passageiro/ Setor/ Motivo",
-      "Itinerário",
-      "Status"
-    ]
+    id: "painel",
+    title: "PAINEL",
+    sheet: "PAINEL",
+    headers: ["Data","Hora","Veículo","Empregado","Motivo","Itinerário","Status"]
   },
-
   {
-    id:"agenda",
-    title:"AGENDA DO DIA",
-    sheet:"AGENDA DO DIA",
-
-    headers:[
-      "Data",
-      "Hora",
-      "Passageiro",
-      "Setor",
-      "Motivo",
-      "Itinerário",
-      "Status"
-    ]
+    id: "agenda",
+    title: "AGENDA DO DIA",
+    sheet: "AGENDA DO DIA",
+    headers: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"]
   },
-
   {
-    id:"social",
-    title:"AGENDA SERVIÇO SOCIAL",
-    sheet:"AGENDA SERVIÇO SOCIAL",
-
-    headers:[
-      "Data",
-      "Período",
-      "Passageiro",
-      "Motivo",
-      "Itinerário",
-      "Status"
-    ]
+    id: "social",
+    title: "SERVIÇO SOCIAL",
+    sheet: "AGENDA SERVIÇO SOCIAL",
+    headers: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
   }
 ];
 
-/* ================= STATUS CONFIG ================= */
-
-const STATUS = {
-
-  atendido:{
-    icon:'<span style="color:#00ff9c">✔</span>',
-    class:"status-atendido"
-  },
-
-  concluido:{
-    icon:'<span style="color:#7CFC00">✔</span>',
-    class:"status-concluido"
-  },
-
-  andamento:{
-    icon:'<span style="color:#ffcc00">⏳</span>',
-    class:"status-andamento"
-  },
-
-  cancelado:{
-    icon:'<span style="color:#ff4d4d">✖</span>',
-    class:"status-cancelado"
-  },
-
-  manutenção:{
-    icon:'<span style="color:#ff9800">🔧</span>',
-    class:"status-manutencao"
-  }
-
+const STATUS_MAP = {
+  atendido: { icon: "✔", class: "status-atendido" },
+  concluido: { icon: "✔", class: "status-concluido" },
+  andamento: { icon: "⏳", class: "status-andamento" },
+  cancelado: { icon: "✖", class: "status-cancelado" },
+  manutenção: { icon: "🔧", class: "status-manutencao" }
 };
 
-/* ================= HELPERS ================= */
+const EMPREGADOS = ["CACIO","CELSO","NEI"];
 
-/* 🔹 converte resposta GViz em JSON */
-const parseGviz = txt =>
+/* ================= UTILS ================= */
 
-  JSON.parse(
-    txt.substring(
-      txt.indexOf("{"),
-      txt.lastIndexOf("}") + 1
-    )
-  );
+const parseGviz = txt => JSON.parse(txt.slice(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
 
-/* 🔹 extrai valor da célula */
-const getCell = c =>
-  c?.f ?? c?.v ?? "";
+const getCellValue = c => c?.f ?? c?.v ?? "";
 
-/* 🔹 identifica chave do status */
-function getStatusKey(status=""){
+const getStatusKey = (status="") =>
+  Object.keys(STATUS_MAP).find(k => status.toLowerCase().includes(k));
 
-  status = status.toLowerCase();
+const getStatusInfo = status => STATUS_MAP[getStatusKey(status)] || {};
 
-  return Object.keys(STATUS)
-    .find(key => status.includes(key));
-}
+/* ================= DATA ================= */
 
-/* 🔹 retorna classe CSS */
-function getStatusClass(status){
-
-  const key =
-    getStatusKey(status);
-
-  return STATUS[key]?.class || "";
-}
-
-/* 🔹 retorna ícone */
-function getStatusIcon(status){
-
-  const key =
-    getStatusKey(status);
-
-  return STATUS[key]?.icon || "";
-}
-
-
-/* ================= FETCH ================= */
-
-async function fetchSheet(sheet){
-
-  const url =
-
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
-
-    `?sheet=${encodeURIComponent(sheet)}` +
-
-    `&tqx=out:json`;
+async function fetchSheet(sheet) {
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}&tqx=out:json`;
 
   const res = await fetch(url);
+  if (!res.ok) throw new Error("Erro ao buscar dados");
 
   return parseGviz(await res.text());
 }
 
-/* ================= TABLE ================= */
+/* ================= RENDER ================= */
 
-function renderTable(headers, rows){
+function renderTable({ headers, rows }) {
+  const head = `
+    <thead>
+      <tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr>
+    </thead>
+  `;
+
+  const body = rows.map(r => renderRow(r)).join("");
+
+  return `<table>${head}<tbody>${body}</tbody></table>`;
+}
+
+function renderRow(row) {
+  const values = (row.c || []).map(getCellValue);
+
+  if (values.every(v => !String(v).trim())) return "";
+
+  const status = values.at(-1);
+  const { icon = "", class: css = "" } = getStatusInfo(status);
 
   return `
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          ${headers.map(h => `
-            <th>${h}</th>
-          `).join("")}
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-      
-
-        ${rows.map(row => {
-
- const values =
-   (row.c || []).map(getCell);
-
-  if(
-   values.every(v =>
-   String(v).trim() === ""
-   )
-  ){
-    return "";
-  }
-
-          
-const status =
-  values.at(-1)?.toLowerCase() || "";
-
-const rowClass =
-  getStatusClass(status);
-
-const icon =
-  getStatusIcon(status);
-
-return `
-
-  <tr class="${rowClass}">
-
-    ${values.map((v,i)=>{
-
-      const isLast =
-        i === values.length - 1;
-
-      return `
-        <td class="${isLast ? 'status-icon' : ''}">
-
-          ${isLast ? icon : v}
-
-        </td>
-      `;
-    }).join("")}
-
-  </tr>
-`;
-
-    }).join("")}
-          
-      </tbody>
-
-    </table>
+    <tr class="${css}">
+      ${values.map((v, i) =>
+        `<td class="${i === values.length - 1 ? "status-icon" : ""}">
+          ${i === values.length - 1 ? icon : v}
+        </td>`
+      ).join("")}
+    </tr>
   `;
 }
 
-/* ================= STATUS EMPREGADOS ================= */
+/* ================= EMPREGADOS ================= */
 
-function renderEmpregados(rows){
+function renderEmpregados(rows) {
+  const ocupados = new Set();
 
-  const nomes = [
-    "CACIO",
-    "CELSO",
-    "NEI"
-  ];
+  rows.forEach(r => {
+    const text = JSON.stringify(r).toUpperCase();
+    const status = text.toLowerCase();
 
-  const usados = {};
+    if (!status.includes("andamento")) return;
 
-  nomes.forEach(n => usados[n] = false);
-
-  rows.forEach(r=>{
-
-    const cells =
-      (r.c || []).map(getCell);
-
-    const status =
-      String(cells.at(-1) || "")
-      .toLowerCase();
-
-    if(!status.includes("andamento"))
-      return;
-
-    const text =
-      JSON.stringify(r).toUpperCase();
-
-    nomes.forEach(nome=>{
-
-      if(text.includes(nome)){
-        usados[nome] = true;
-      }
+    EMPREGADOS.forEach(emp => {
+      if (text.includes(emp)) ocupados.add(emp);
     });
   });
 
-  document.getElementById(
-    "status-empregados"
-  ).innerHTML = nomes.map(nome => `
+  const html = EMPREGADOS.map(nome => {
+    const isBusy = ocupados.has(nome);
 
-    <span class="
-      badge
-      ${usados[nome]
-        ? "ocupado"
-        : "livre"}
-    ">
+    return `
+      <span class="badge ${isBusy ? "ocupado" : "livre"}">
+        ${nome} (${isBusy ? "OCUPADO" : "LIVRE"})
+      </span>
+    `;
+  }).join("");
 
-      ${nome}
-      (${usados[nome]
-        ? "OCUPADO"
-        : "LIVRE"})
-
-    </span>
-
-  `).join("");
+  document.getElementById("status-empregados").innerHTML = html;
 }
 
-/* ================= LOAD ================= */
+/* ================= APP ================= */
 
 let lastHash = "";
-let firstLoad = true;
+let isFirstLoad = true;
 
-async function loadAll(){
+async function loadAll() {
+  const app = document.getElementById("app");
 
-  const app =
-    document.getElementById("app");
+  try {
+    const results = await Promise.all(TABS.map(t => fetchSheet(t.sheet)));
 
-  try{
+    const currentHash = JSON.stringify(results);
 
-    const results =
-      await Promise.all(
-
-        TABS.map(
-          t => fetchSheet(t.sheet)
-        )
-      );
-
-    const hash =
-      JSON.stringify(results);
-
-    if(
-      !firstLoad &&
-      hash !== lastHash
-    ){
+    if (!isFirstLoad && currentHash !== lastHash) {
       playBeep();
     }
 
-    firstLoad = false;
-    lastHash = hash;
+    lastHash = currentHash;
+    isFirstLoad = false;
 
-    app.innerHTML = "";
+    const html = results.map((data, index) => {
+      const rows = data.table.rows || [];
 
-    results.forEach((data,index)=>{
+      if (index === 0) renderEmpregados(rows);
 
-      const tab = TABS[index];
-
-      const rows =
-        data.table.rows || [];
-
-      const section =
-        document.createElement("section");
-
-      section.className = "card";
-
-      section.innerHTML = `
-
-        <h2>${tab.title}</h2>
-
-        ${renderTable(
-          tab.headers,
-          rows
-        )}
-
+      return `
+        <section class="card">
+          <h2>${TABS[index].title}</h2>
+          ${renderTable({ headers: TABS[index].headers, rows })}
+        </section>
       `;
+    }).join("");
 
-      app.appendChild(section);
+    app.innerHTML = html;
 
-      if(index === 0){
-        renderEmpregados(rows);
-      }
-    });
-
-  }catch(err){
-
+  } catch (err) {
     console.error(err);
-
-    app.innerHTML =
-      "<div>Erro ao carregar dados.</div>";
+    app.innerHTML = "<div>Erro ao carregar dados.</div>";
   }
 }
 
 /* ================= CLOCK ================= */
 
-function updateClock(){
-
-  const now = new Date();
-
-  document.getElementById(
-    "clock"
-  ).innerText =
-
-    now.toLocaleDateString("pt-BR") +
-
-    " — " +
-
-    now.toLocaleTimeString(
-      "pt-BR",
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
+function updateClock() {
+  document.getElementById("clock").innerText =
+    new Date().toLocaleString("pt-BR", {
+      dateStyle: "short",
+      timeStyle: "short"
+    });
 }
 
-setInterval(updateClock,1000);
-
-updateClock();
+setInterval(updateClock, 1000);
 
 /* ================= AUDIO ================= */
 
-const audio =
-  document.getElementById("beep");
+const audio = document.getElementById("beep");
+const btnAudio = document.getElementById("toggle-audio");
 
-const audioBtn =
-  document.getElementById("toggle-audio");
+let soundOn = true;
 
-let soundEnabled = true;
-
-function updateAudioButton(){
-
-  if(soundEnabled){
-
-    audioBtn.innerText = "🔊 SOM ON";
-
-    audioBtn.classList.remove("off");
-
-  }else{
-
-    audioBtn.innerText = "🔇 SOM OFF";
-
-    audioBtn.classList.add("off");
-  }
-}
-
-audioBtn.onclick = () => {
-
-  soundEnabled = !soundEnabled;
-
-  updateAudioButton();
+btnAudio.onclick = () => {
+  soundOn = !soundOn;
+  btnAudio.innerText = soundOn ? "🔊 SOM ON" : "🔇 SOM OFF";
+  btnAudio.classList.toggle("off", !soundOn);
 };
 
-function playBeep(){
-
-  if(!soundEnabled)
-    return;
-
+function playBeep() {
+  if (!soundOn) return;
   audio.currentTime = 0;
-
-  audio.play().catch(()=>{});
-
-  updateAudioButton();
+  audio.play().catch(() => {});
 }
 
 /* ================= FULLSCREEN ================= */
 
-document.getElementById(
-  "toggle-fullscreen"
-).onclick = async () => {
-
-  if(!document.fullscreenElement){
-
-    await document.documentElement
-      .requestFullscreen();
-
-  }else{
-
+document.getElementById("toggle-fullscreen").onclick = async () => {
+  if (!document.fullscreenElement) {
+    await document.documentElement.requestFullscreen();
+  } else {
     await document.exitFullscreen();
   }
 };
@@ -887,8 +648,8 @@ document.getElementById(
 /* ================= INIT ================= */
 
 loadAll();
+setInterval(loadAll, CONFIG.REFRESH_INTERVAL);
 
-setInterval(loadAll,30000);
 
 </script>
 

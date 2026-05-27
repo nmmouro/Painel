@@ -192,6 +192,20 @@ main{
   overflow:auto;
 }
 
+/* ================= GRID GERAL ================= */
+
+.grid-geral{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:14px;
+}
+
+
+  
+
 /* CARD */
 
 .card{
@@ -349,6 +363,15 @@ tbody tr:nth-child(even) td{
   .status-icon{
     font-size:18px;
   }
+
+
+
+  .grid-geral{
+
+    grid-template-columns:1fr;
+  }
+
+  
 }
 
 </style>
@@ -426,53 +449,69 @@ const CONFIG = {
 const TABS = [
 
   {
-    id:"geral",
-    title:"GERAL",
-    sheet:"GERAL",
+    id: "veiculos",
+    title: "VEÍCULOS",
+    sheet: "GERAL",
 
-    headers:[
-      "V1","V2","V3",
-      "V4","M1","M2","M3"
-    ]
+    headers: ["V1","V2","V3","V4"]
   },
 
   {
-    id:"painel",
-    title:"PAINEL",
-    sheet:"PAINEL",
+    id: "motoristas",
+    title: "MOTORISTAS",
+    sheet: "GERAL",
 
-    headers:[
-      "Data","Hora","Veículo",
+    headers: ["M1","M2","M3"]
+  },
+
+  {
+    id: "painel",
+    title: "PAINEL",
+    sheet: "PAINEL",
+
+    headers: [
+      "Data",
+      "Hora",
+      "Veículo",
       "Empregado",
       "Passageiro/ Setor/ Motivo",
-      "Itinerário","Status"
+      "Itinerário",
+      "Status"
     ]
   },
 
   {
-    id:"agenda",
-    title:"AGENDA DO DIA",
-    sheet:"AGENDA DO DIA",
+    id: "agenda",
+    title: "AGENDA DO DIA",
+    sheet: "AGENDA DO DIA",
 
-    headers:[
-      "Data","Hora","Passageiro",
-      "Setor","Motivo",
-      "Itinerário","Status"
+    headers: [
+      "Data",
+      "Hora",
+      "Passageiro",
+      "Setor",
+      "Motivo",
+      "Itinerário",
+      "Status"
     ]
   },
 
   {
-    id:"social",
-    title:"AGENDA SERVIÇO SOCIAL",
-    sheet:"AGENDA SERVIÇO SOCIAL",
+    id: "social",
+    title: "AGENDA SERVIÇO SOCIAL",
+    sheet: "AGENDA SERVIÇO SOCIAL",
 
-    headers:[
-      "Data","Período","Passageiro",
-      "Motivo","Itinerário","Status"
+    headers: [
+      "Data",
+      "Período",
+      "Passageiro",
+      "Motivo",
+      "Itinerário",
+      "Status"
     ]
   }
 ];
-
+  
 /* ================= STATUS ================= */
 
 const STATUS_MAP = {
@@ -685,61 +724,131 @@ function renderEmpregados(rows){
 let lastHash = "";
 let firstLoad = true;
 
-async function loadAll(){
+async function loadAll() {
 
   const app =
     document.getElementById("app");
 
-  try{
+  try {
 
     const results =
       await Promise.all(
-        TABS.map(t =>
-          fetchSheet(t.sheet)
-        )
+        TABS.map(t => fetchSheet(t.sheet))
       );
 
-    const hash =
+    const currentHash =
       JSON.stringify(results);
 
-    if(
-      !firstLoad &&
-      hash !== lastHash
-    ){
+    if (
+      !isFirstLoad &&
+      currentHash !== lastHash
+    ) {
       playBeep();
     }
 
-    lastHash = hash;
-    firstLoad = false;
+    lastHash = currentHash;
+    isFirstLoad = false;
 
-    app.innerHTML = results.map((data,index)=>{
+    app.innerHTML = "";
+
+    /* ================= GERAL ================= */
+
+    const geralGrid =
+      document.createElement("div");
+
+    geralGrid.className =
+      "grid-geral";
+
+    /* VEÍCULOS */
+
+    const veiculosRows =
+      results[0].table.rows || [];
+
+    const veiculosCard =
+      document.createElement("section");
+
+    veiculosCard.className =
+      "card";
+
+    veiculosCard.innerHTML = `
+
+      <h2>VEÍCULOS</h2>
+
+      ${renderTable({
+        headers: TABS[0].headers,
+        rows: veiculosRows.map(r => ({
+          c:(r.c || []).slice(0,4)
+        }))
+      })}
+    `;
+
+    geralGrid.appendChild(
+      veiculosCard
+    );
+
+    /* MOTORISTAS */
+
+    const motoristasRows =
+      results[1].table.rows || [];
+
+    const motoristasCard =
+      document.createElement("section");
+
+    motoristasCard.className =
+      "card";
+
+    motoristasCard.innerHTML = `
+
+      <h2>MOTORISTAS</h2>
+
+      ${renderTable({
+        headers: TABS[1].headers,
+        rows: motoristasRows.map(r => ({
+          c:(r.c || []).slice(4,7)
+        }))
+      })}
+    `;
+
+    geralGrid.appendChild(
+      motoristasCard
+    );
+
+    app.appendChild(geralGrid);
+
+    /* ================= DEMAIS TABELAS ================= */
+
+    results.slice(2).forEach((data,index)=>{
+
+      const tab =
+        TABS[index + 2];
 
       const rows =
         data.table.rows || [];
 
-      if(TABS[index].id === "painel"){
+      if(index === 0){
         renderEmpregados(rows);
       }
 
-      return `
+      const section =
+        document.createElement("section");
 
-        <section class="card">
+      section.className =
+        "card";
 
-          <h2>
-            ${TABS[index].title}
-          </h2>
+      section.innerHTML = `
 
-          ${renderTable({
-            headers:TABS[index].headers,
-            rows
-          })}
+        <h2>${tab.title}</h2>
 
-        </section>
+        ${renderTable({
+          headers: tab.headers,
+          rows
+        })}
       `;
 
-    }).join("");
+      app.appendChild(section);
+    });
 
-  }catch(err){
+  } catch(err) {
 
     console.error(err);
 
@@ -747,7 +856,6 @@ async function loadAll(){
       "<div>Erro ao carregar dados.</div>";
   }
 }
-
 /* ================= CLOCK ================= */
 
 function updateClock(){

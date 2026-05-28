@@ -209,16 +209,13 @@ main{
 /* ================= GRID GERAL ================= */
 
 .grid-geral{
-
   display:grid;
-
   grid-template-columns:1fr 1fr;
-
   gap:14px;
-  
-  /* limita para apenas 1 linha */
-  grid-auto-rows:2;
-  
+
+  grid-auto-rows:120px;
+  max-height:calc((120px * 2) + 14px);
+  overflow:hidden;
 }
 
 /* ================= CARD ================= */

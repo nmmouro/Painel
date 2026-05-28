@@ -315,6 +315,29 @@ tbody tr:nth-child(even) td{
   text-align:center;
 }
 
+  /* ================= STATUS TEXTO ================= */
+
+.status-manutencao-text{
+
+  color:#4da6ff;
+
+  font-weight:700;
+}
+
+.status-ocupado-text{
+
+  color:#ff4d4d;
+
+  font-weight:700;
+}
+
+.status-livre-text{
+
+  color:#00ff9c;
+
+  font-weight:700;
+}
+
 /* ================= MOBILE ================= */
 
 @media(max-width:768px){
@@ -649,33 +672,34 @@ function renderRow(row){
     return "";
   }
 
-  const status =
-    values.at(-1);
-
-  const {
-    icon = "",
-    class:css = ""
-  } = getStatusInfo(status);
-
   return `
 
-    <tr class="${css}">
+    <tr>
 
-      ${values.map((v,i)=>`
+      ${values.map((v)=>{
 
-        <td class="
-          ${i === values.length - 1
-            ? "status-icon"
-            : ""}
-        ">
+        const texto =
+          String(v).toLowerCase();
 
-          ${i === values.length - 1
-            ? icon
-            : v}
+        let classe = "";
 
-        </td>
+        if(texto.includes("manutenção")){
+          classe = "status-manutencao-text";
+        }
+        else if(texto.includes("ocupado")){
+          classe = "status-ocupado-text";
+        }
+        else if(texto.includes("livre")){
+          classe = "status-livre-text";
+        }
 
-      `).join("")}
+        return `
+          <td class="${classe}">
+            ${v}
+          </td>
+        `;
+
+      }).join("")}
 
     </tr>
   `;

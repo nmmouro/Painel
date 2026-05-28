@@ -325,6 +325,13 @@ function getClass(v){
 
 function renderTable(headers,rows){
 
+  const validRows = rows.filter(r =>
+
+    (r.c || []).some(c =>
+      String(val(c)).trim() !== ""
+    )
+  );
+
   return `
 
     <table>
@@ -339,7 +346,7 @@ function renderTable(headers,rows){
 
       <tbody>
 
-        ${rows.map(r=>`
+        ${validRows.map(r=>`
 
           <tr>
 

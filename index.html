@@ -1,4 +1,4 @@
-```html
+```html id="jlwm7n"
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -42,13 +42,14 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:14px 20px;
+  gap:10px;
+  padding:12px 20px;
   background:#020617;
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .logo{
-  height:60px;
+  height:55px;
 }
 
 .title{
@@ -56,16 +57,35 @@ body{
   font-weight:700;
 }
 
+.right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
 #clock{
-  font-size:22px;
+  font-size:20px;
   font-weight:700;
+}
+
+button{
+  border:none;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.off{
+  background:#ff4d4d;
+  color:#fff;
 }
 
 main{
   display:grid;
   gap:14px;
   padding:12px;
-  height:calc(100vh - 95px);
+  height:calc(100vh - 90px);
   overflow:auto;
 }
 
@@ -95,13 +115,13 @@ table{
 
 thead th{
   background:var(--header);
-  padding:12px;
+  padding:10px;
   border:1px solid var(--border);
   font-size:18px;
 }
 
 tbody td{
-  padding:12px;
+  padding:10px;
   border:1px solid var(--border);
   background:var(--table);
   text-align:center;
@@ -135,12 +155,17 @@ tbody tr:nth-child(even) td{
     font-size:14px;
   }
 
-  #clock{
-    font-size:12px;
-  }
-
   .logo{
     height:28px;
+  }
+
+  #clock{
+    font-size:11px;
+  }
+
+  button{
+    font-size:10px;
+    padding:4px 6px;
   }
 
   thead th,
@@ -156,6 +181,10 @@ tbody tr:nth-child(even) td{
 
 <body>
 
+<audio id="beep" preload="auto">
+  <source src="./alerta.mp3" type="audio/mpeg">
+</audio>
+
 <header class="topbar">
 
   <img
@@ -168,7 +197,19 @@ tbody tr:nth-child(even) td{
     MOVIMENTAÇÃO DIÁRIA
   </div>
 
-  <div id="clock"></div>
+  <div class="right">
+
+    <div id="clock"></div>
+
+    <button id="toggle-audio">
+      🔊 SOM
+    </button>
+
+    <button id="toggle-fullscreen">
+      ⛶ TELA
+    </button>
+
+  </div>
 
 </header>
 
@@ -186,9 +227,7 @@ const CONFIG = {
 
 const TABS = [
 
-  {
-    sheet:"GERAL"
-  },
+  { sheet:"GERAL" },
 
   {
     title:"PAINEL",
@@ -199,7 +238,7 @@ const TABS = [
       "Hora",
       "Veículo",
       "Empregado",
-      "Passageiro / Motivo",
+      "Passageiro",
       "Itinerário",
       "Status"
     ]
@@ -235,7 +274,7 @@ const TABS = [
   }
 ];
 
-const parseGviz = txt =>
+const parse = txt =>
 
   JSON.parse(
     txt.slice(
@@ -244,7 +283,7 @@ const parseGviz = txt =>
     )
   );
 
-const getValue = c =>
+const val = c =>
   c?.f ?? c?.v ?? "";
 
 async function fetchSheet(sheet){
@@ -257,9 +296,9 @@ async function fetchSheet(sheet){
 
     `&tqx=out:json`;
 
-  const res = await fetch(url);
-
-  return parseGviz(await res.text());
+  return parse(
+    await (await fetch(url)).text()
+  );
 }
 
 function getClass(v){
@@ -301,8 +340,8 @@ function renderTable(headers,rows){
 
             ${(r.c || []).map(c=>`
 
-              <td class="${getClass(getValue(c))}">
-                ${getValue(c)}
+              <td class="${getClass(val(c))}">
+                ${val(c)}
               </td>
 
             `).join("")}
@@ -317,6 +356,48 @@ function renderTable(headers,rows){
   `;
 }
 
+let lastHash = "";
+let firstLoad = true;
+
+const audio =
+  document.getElementById("beep");
+
+let soundOn = true;
+
+document.getElementById(
+  "toggle-audio"
+).onclick = ()=>{
+
+  soundOn = !soundOn;
+
+  document
+    .getElementById("toggle-audio")
+    .classList.toggle("off",!soundOn);
+};
+
+function beep(){
+
+  if(!soundOn) return;
+
+  audio.currentTime = 0;
+  audio.play().catch(()=>{});
+}
+
+document.getElementById(
+  "toggle-fullscreen"
+).onclick = async ()=>{
+
+  if(!document.fullscreenElement){
+
+    await document.documentElement
+      .requestFullscreen();
+
+  }else{
+
+    await document.exitFullscreen();
+  }
+};
+
 async function loadAll(){
 
   const app =
@@ -329,6 +410,16 @@ async function loadAll(){
       )
     );
 
+  const hash =
+    JSON.stringify(results);
+
+  if(!firstLoad && hash !== lastHash){
+    beep();
+  }
+
+  firstLoad = false;
+  lastHash = hash;
+
   app.innerHTML = "";
 
   const geral =
@@ -340,17 +431,39 @@ async function loadAll(){
   grid.className =
     "grid-geral";
 
-  const veiculos =
-    document.createElement("section");
+  const createCard =
+    (title,headers,indexes)=>{
 
-  veiculos.className =
-    "card";
+      const card =
+        document.createElement("section");
 
-  veiculos.innerHTML = `
+      card.className = "card";
 
-    <h2>VEÍCULOS</h2>
+      card.innerHTML = `
 
-    ${renderTable(
+        <h2>${title}</h2>
+
+        ${renderTable(
+
+          headers,
+
+          geral.map(r=>({
+            c:indexes.map(i =>
+              r.c?.[i] || {v:""}
+            )
+          }))
+        )}
+
+      `;
+
+      return card;
+    };
+
+  grid.appendChild(
+
+    createCard(
+
+      "VEÍCULOS",
 
       [
         "TRAIL TXN1I89",
@@ -359,29 +472,15 @@ async function loadAll(){
         "CRETA TXJ6F20"
       ],
 
-      geral.map(r=>({
-        c:[
-          r.c?.[0] || {v:""},
-          r.c?.[1] || {v:""},
-          r.c?.[2] || {v:""},
-          r.c?.[3] || {v:""}
-        ]
-      }))
-    )}
+      [0,1,2,3]
+    )
+  );
 
-  `;
+  grid.appendChild(
 
-  const motoristas =
-    document.createElement("section");
+    createCard(
 
-  motoristas.className =
-    "card";
-
-  motoristas.innerHTML = `
-
-    <h2>MOTORISTAS</h2>
-
-    ${renderTable(
+      "MOTORISTAS",
 
       [
         "CACIO",
@@ -389,45 +488,34 @@ async function loadAll(){
         "NEI"
       ],
 
-      geral.map(r=>({
-        c:[
-          r.c?.[4] || {v:""},
-          r.c?.[5] || {v:""},
-          r.c?.[6] || {v:""}
-        ]
-      }))
-    )}
-
-  `;
-
-  grid.appendChild(veiculos);
-  grid.appendChild(motoristas);
+      [4,5,6]
+    )
+  );
 
   app.appendChild(grid);
 
-  results.slice(1).forEach((data,i)=>{
+  results.slice(1).forEach((d,i)=>{
 
     const tab =
       TABS[i + 1];
 
-    const section =
+    const card =
       document.createElement("section");
 
-    section.className =
-      "card";
+    card.className = "card";
 
-    section.innerHTML = `
+    card.innerHTML = `
 
       <h2>${tab.title}</h2>
 
       ${renderTable(
         tab.headers,
-        data.table.rows || []
+        d.table.rows || []
       )}
 
     `;
 
-    app.appendChild(section);
+    app.appendChild(card);
   });
 }
 
@@ -447,7 +535,6 @@ function updateClock(){
 }
 
 updateClock();
-
 setInterval(updateClock,1000);
 
 loadAll();

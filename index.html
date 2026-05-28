@@ -213,11 +213,10 @@ main{
   grid-template-columns:1fr 1fr;
   gap:14px;
 
-  grid-auto-rows:120px;
-  max-height:calc((120px * 2) + 14px);
+  /* permite somente 2 linhas */
+  max-height:260px; /* ajuste conforme altura dos cards */
   overflow:hidden;
 }
-
 /* ================= CARD ================= */
 
 .card{

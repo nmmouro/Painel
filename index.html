@@ -474,16 +474,8 @@ const TABS = [
 
   {
     id:"geral",
-    sheet:"GERAL",
-    headers:[
-      "TRAIL TXN1I89",
-      "CRETA TXJ6F18",
-      "CRETA TXJ6F19",
-      "CRETA TXJ6F20",
-      "CACIO",
-      "CELSO",
-      "NEI"
-    ]
+    sheet:"GERAL"
+    
   },
 
   {
@@ -801,10 +793,10 @@ async function loadAll(){
       ${renderTable({
 
         headers:[
-          "V1",
-          "V2",
-          "V3",
-          "V4"
+          "TRAIL TXN1I89",
+          "CRETA TXJ6F18",
+          "CRETA TXJ6F19",
+          "CRETA TXJ6F20"
         ],
 
         rows:geralRows.map(r=>({
@@ -830,9 +822,9 @@ async function loadAll(){
       ${renderTable({
 
         headers:[
-          "M1",
-          "M2",
-          "M3"
+          "CACIO",
+          "CELSO",
+          "NEI"
         ],
 
         rows:geralRows.map(r=>({

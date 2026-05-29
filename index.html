@@ -487,15 +487,9 @@ function renderVerticalTable(headers, rows, indexes){
 
 /* ================= CARD VERTICAL ================= */
 
-function createCard(title, headers, rows){
+function createCard(title, headers, rows, indexes){
 
-  const validRows = rows.filter(r =>
-    (r.c || []).some(c =>
-      String(val(c)).trim() !== ""
-    )
-  );
-
-  return `
+  let html = `
 
     <section class="card">
 
@@ -505,37 +499,114 @@ function createCard(title, headers, rows){
 
         <table>
 
-          <thead>
+  `;
 
-            <tr>
+  /* ================= VEÍCULOS ================= */
 
-              ${headers.map(h => `
-                <th>${h}</th>
-              `).join("")}
+  if(title === "VEÍCULOS"){
 
-            </tr>
+    html += `
 
-          </thead>
+      <thead>
 
-          <tbody>
+        <tr>
 
-            ${validRows.map(r => `
+          <th>VEÍCULOS</th>
+          <th>STATUS</th>
+          <th>ODÔMETRO</th>
+          <th>COMBUSTÍVEL</th>
 
-              <tr>
+        </tr>
 
-                ${(r.c || []).map(c => `
+      </thead>
 
-                  <td class="${getClass(val(c))}">
-                    ${val(c)}
-                  </td>
+      <tbody>
 
-                `).join("")}
+    `;
 
-              </tr>
+    headers.forEach((header, idx) => {
 
-            `).join("")}
+      const coluna = indexes[idx];
 
-          </tbody>
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[2]?.c?.[coluna] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
+  }
+
+  /* ================= MOTORISTAS ================= */
+
+  if(title === "MOTORISTAS"){
+
+    html += `
+
+      <thead>
+
+        <tr>
+
+          <th>MOTORISTAS</th>
+          <th>STATUS</th>
+          <th>OUTROS</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+    `;
+
+    headers.forEach((header, idx) => {
+
+      const coluna = indexes[idx];
+
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
+  }
+
+  html += `
 
         </table>
 
@@ -544,7 +615,10 @@ function createCard(title, headers, rows){
     </section>
 
   `;
-}  
+
+  return html;
+}
+  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -622,49 +696,51 @@ async function loadAll(){
 
     /* ================= GERAL ================= */
 
-  const grid = document.createElement("div");
-grid.className = "grid-geral";
+    const geralRows =
+      results[0].table.rows || [];
 
-/* CARD VEÍCULOS */
+    const grid =
+      document.createElement("div");
 
-const veiculosDiv = document.createElement("div");
+    grid.className =
+      "grid-geral";
 
-veiculosDiv.innerHTML =
-  createCard(
-  "VEÍCULOS",
-  [
-    "VEÍCULO",
-    "STATUS",
-    "ODÔMETRO",
-    "COMBUSTÍVEL"
-  ],
-  geralRows.slice(0,4)
-)
+    grid.innerHTML =
 
-grid.appendChild(
-  veiculosDiv.firstElementChild
-);
+      createCard(
 
-/* CARD MOTORISTAS */
+        "VEÍCULOS",
 
-const motoristasDiv = document.createElement("div");
+        [
+          "TRAIL TXN1I89",
+          "CRETA TXJ6F18",
+          "CRETA TXJ6F19",
+          "CRETA TXJ6F20"
+        ],
 
-motoristasDiv.innerHTML =
-  createCard(
-  "MOTORISTAS",
-  [
-    "MOTORISTA",
-    "STATUS",
-    "OUTROS"
-  ],
-  geralRows.slice(4)
-)
+        geralRows,
 
-grid.appendChild(
-  motoristasDiv.firstElementChild
-);
+        [0,1,2,3]
+      )
 
-app.appendChild(grid);
+      +
+
+      createCard(
+
+        "MOTORISTAS",
+
+        [
+          "CACIO",
+          "CELSO",
+          "NEI"
+        ],
+
+        geralRows,
+
+        [4,5,6]
+      );
+
+    app.appendChild(grid);
 
     /* ================= OUTRAS TABELAS ================= */
 
@@ -730,7 +806,7 @@ setInterval(
   loadAll,
   CONFIG.REFRESH_INTERVAL
 );
-  
+
 </script>
 
 </body>

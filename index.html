@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
 
 <meta charset="utf-8">
@@ -82,8 +83,8 @@ button{
 
 main{
   display:grid;
-  gap:14px;
-  padding:12px;
+  gap:10px;
+  padding:10px;
   height:calc(100vh - 90px);
   overflow:auto;
 }
@@ -92,15 +93,12 @@ main{
   display:grid;
   grid-template-columns:2fr 1fr;
   gap:10px;
-  max-height:auto;
-  overflow:hidden;
 }
-
 
 .card{
   background:var(--card);
   border-radius:16px;
-  overflow:auto;
+  overflow:hidden;
   border:1px solid rgba(255,255,255,.08);
 }
 
@@ -108,6 +106,10 @@ main{
   text-align:center;
   padding:10px;
   font-size:22px;
+}
+
+.table-wrap{
+  overflow:auto;
 }
 
 table{
@@ -120,6 +122,15 @@ thead th{
   padding:10px;
   border:1px solid var(--border);
   font-size:18px;
+  white-space:nowrap;
+}
+
+tbody th{
+  background:var(--header);
+  padding:10px;
+  border:1px solid var(--border);
+  font-size:18px;
+  white-space:nowrap;
 }
 
 tbody td{
@@ -127,8 +138,9 @@ tbody td{
   border:1px solid var(--border);
   background:var(--table);
   text-align:center;
-  font-size:22px;
+  font-size:20px;
   font-weight:700;
+  white-space:nowrap;
 }
 
 tbody tr:nth-child(even) td{
@@ -171,6 +183,7 @@ tbody tr:nth-child(even) td{
   }
 
   thead th,
+  tbody th,
   tbody td{
     font-size:10px;
     padding:6px;
@@ -217,8 +230,9 @@ tbody tr:nth-child(even) td{
 
 <main id="app"></main>
 
-
 <script>
+
+/* ================= CONFIG ================= */
 
 const CONFIG = {
 
@@ -227,6 +241,8 @@ const CONFIG = {
 
   REFRESH_INTERVAL:30000
 };
+
+/* ================= TABS ================= */
 
 const TABS = [
 
@@ -327,7 +343,7 @@ function getClass(v){
   return "";
 }
 
-/* ================= TABLE ================= */
+/* ================= TABELAS NORMAIS ================= */
 
 function renderTable(headers, rows){
 
@@ -340,51 +356,59 @@ function renderTable(headers, rows){
 
   return `
 
-    <table>
+    <div class="table-wrap">
 
-      <thead>
+      <table>
 
-        <tr>
-
-          ${headers.map(h => `
-            <th>${h}</th>
-          `).join("")}
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-        ${validRows.map(r => `
+        <thead>
 
           <tr>
 
-            ${(r.c || []).map(c => `
-
-              <td class="${getClass(val(c))}">
-                ${val(c)}
-              </td>
-
+            ${headers.map(h => `
+              <th>${h}</th>
             `).join("")}
 
           </tr>
 
-        `).join("")}
+        </thead>
 
-      </tbody>
+        <tbody>
 
-    </table>
+          ${validRows.map(r => `
+
+            <tr>
+
+              ${(r.c || []).map(c => `
+
+                <td class="${getClass(val(c))}">
+                  ${val(c)}
+                </td>
+
+              `).join("")}
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
   `;
 }
+
+/* ================= TABELAS VERTICAIS ================= */
 
 function renderVerticalTable(headers, rows, indexes){
 
   let html = `
 
-    <table>
+    <div class="table-wrap">
 
-      <tbody>
+      <table>
+
+        <tbody>
 
   `;
 
@@ -413,20 +437,53 @@ function renderVerticalTable(headers, rows, indexes){
     });
 
     html += `</tr>`;
-
   });
 
   html += `
 
-      </tbody>
+        </tbody>
 
-    </table>
+      </table>
+
+    </div>
 
   `;
 
   return html;
 }
-  
+
+/* ================= CARD VERTICAL ================= */
+
+function createCard(title, headers, rows, indexes){
+
+  const validRows = rows.filter(r =>
+
+    indexes.some(i =>
+
+      String(
+        val(r.c?.[i] || { v:"" })
+      ).trim() !== ""
+
+    )
+  );
+
+  return `
+
+    <section class="card">
+
+      <h2>${title}</h2>
+
+      ${renderVerticalTable(
+        headers,
+        validRows,
+        indexes
+      )}
+
+    </section>
+
+  `;
+}
+
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -473,39 +530,6 @@ document.getElementById(
     await document.exitFullscreen();
   }
 };
-
-/* ================= GERAL ================= */
-
-function createCard(title, headers, rows, indexes){
-
-  const validRows = rows.filter(r =>
-
-    indexes.some(i =>
-
-      String(
-        val(r.c?.[i] || { v:"" })
-      ).trim() !== ""
-
-    )
-  );
-
-  return `
-
-    <section class="card">
-
-      <h2>${title}</h2>
-
-      ${renderVerticalTable(
-        headers,
-        validRows,
-        indexes
-      )}
-
-    </section>
-
-  `;
-}
-
 
 /* ================= LOAD ================= */
 
@@ -583,7 +607,7 @@ async function loadAll(){
 
     app.appendChild(grid);
 
-    /* ================= DEMAIS TABELAS ================= */
+    /* ================= OUTRAS TABELAS ================= */
 
     results.slice(1).forEach((d,i)=>{
 
@@ -614,7 +638,7 @@ async function loadAll(){
     console.error(err);
 
     app.innerHTML =
-      "<div>Erro ao carregar dados.</div>";
+      "<div style='padding:20px'>Erro ao carregar dados.</div>";
   }
 }
 
@@ -649,3 +673,7 @@ setInterval(
 );
 
 </script>
+
+</body>
+
+</html>

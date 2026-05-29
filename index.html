@@ -217,6 +217,7 @@ tbody tr:nth-child(even) td{
 
 <main id="app"></main>
 
+
 <script>
 
 const CONFIG = {
@@ -276,6 +277,8 @@ const TABS = [
   }
 ];
 
+/* ================= HELPERS ================= */
+
 const parse = txt =>
 
   JSON.parse(
@@ -287,6 +290,8 @@ const parse = txt =>
 
 const val = c =>
   c?.f ?? c?.v ?? "";
+
+/* ================= FETCH ================= */
 
 async function fetchSheet(sheet){
 
@@ -302,6 +307,8 @@ async function fetchSheet(sheet){
     await (await fetch(url)).text()
   );
 }
+
+/* ================= STATUS ================= */
 
 function getClass(v){
 
@@ -320,7 +327,9 @@ function getClass(v){
   return "";
 }
 
-function renderTable(headers,rows){
+/* ================= TABLE ================= */
+
+function renderTable(headers, rows){
 
   const validRows = rows.filter(r =>
 
@@ -334,20 +343,24 @@ function renderTable(headers,rows){
     <table>
 
       <thead>
+
         <tr>
-          ${headers.map(h=>`
+
+          ${headers.map(h => `
             <th>${h}</th>
           `).join("")}
+
         </tr>
+
       </thead>
 
       <tbody>
 
-        ${validRows.map(r=>`
+        ${validRows.map(r => `
 
           <tr>
 
-            ${(r.c || []).map(c=>`
+            ${(r.c || []).map(c => `
 
               <td class="${getClass(val(c))}">
                 ${val(c)}
@@ -365,6 +378,8 @@ function renderTable(headers,rows){
   `;
 }
 
+/* ================= AUDIO ================= */
+
 let lastHash = "";
 let firstLoad = true;
 
@@ -381,7 +396,7 @@ document.getElementById(
 
   document
     .getElementById("toggle-audio")
-    .classList.toggle("off",!soundOn);
+    .classList.toggle("off", !soundOn);
 };
 
 function beep(){
@@ -389,8 +404,11 @@ function beep(){
   if(!soundOn) return;
 
   audio.currentTime = 0;
+
   audio.play().catch(()=>{});
 }
+
+/* ================= FULLSCREEN ================= */
 
 document.getElementById(
   "toggle-fullscreen"
@@ -407,54 +425,19 @@ document.getElementById(
   }
 };
 
-async function loadAll(){
+/* ================= GERAL ================= */
 
-  const app =
-    document.getElementById("app");
+function createCard(title, headers, rows, indexes){
 
-  const results =
-    await Promise.all(
-      TABS.map(t =>
-        fetchSheet(t.sheet)
-      )
-    );
-
-  const hash =
-    JSON.stringify(results);
-
-  if(!firstLoad && hash !== lastHash){
-    beep();
-  }
-
-  firstLoad = false;
-  lastHash = hash;
-
-  app.innerHTML = "";
-
- const geral =
-  (results[0].table.rows || []).filter(r =>
-
-    (r.c || []).some(c =>
-      String(val(c)).trim() !== ""
-    )
-  );
-
-  const grid =
-    document.createElement("div");
-
-  grid.className =
-    "grid-geral";
-
-  const createCard = (title, headers, indexes) => {
-
-  const card = document.createElement("section");
-
-  card.className = "card";
-
-  const rows = geral.map(r => {
+  const filteredRows = rows.map(r => {
 
     return {
-      c: indexes.map(i => r.c?.[i] || { v:"" })
+
+      c: indexes.map(i => {
+
+        return r.c?.[i] || { v:"" };
+
+      })
     };
 
   }).filter(r =>
@@ -464,76 +447,130 @@ async function loadAll(){
     )
   );
 
-  card.innerHTML = `
+  return `
 
-    <h2>${title}</h2>
+    <section class="card">
 
-    ${renderTable(headers, rows)}
+      <h2>${title}</h2>
 
+      ${renderTable(headers, filteredRows)}
+
+    </section>
   `;
-
-  return card;
-};
-
-  grid.appendChild(
-
-    createCard(
-
-      "VEÍCULOS",
-
-      [
-        "TRAIL TXN1I89",
-        "CRETA TXJ6F18",
-        "CRETA TXJ6F19",
-        "CRETA TXJ6F20"
-      ],
-
-      [0,1,2,3]
-    )
-  );
-
-  grid.appendChild(
-
-    createCard(
-
-      "MOTORISTAS",
-
-      [
-        "CACIO",
-        "CELSO",
-        "NEI"
-      ],
-
-      [4,5,6]
-    )
-  );
-
-  app.appendChild(grid);
-
-  results.slice(1).forEach((d,i)=>{
-
-    const tab =
-      TABS[i + 1];
-
-    const card =
-      document.createElement("section");
-
-    card.className = "card";
-
-    card.innerHTML = `
-
-      <h2>${tab.title}</h2>
-
-      ${renderTable(
-        tab.headers,
-        d.table.rows || []
-      )}
-
-    `;
-
-    app.appendChild(card);
-  });
 }
+
+/* ================= LOAD ================= */
+
+async function loadAll(){
+
+  const app =
+    document.getElementById("app");
+
+  try{
+
+    const results =
+      await Promise.all(
+        TABS.map(t =>
+          fetchSheet(t.sheet)
+        )
+      );
+
+    const hash =
+      JSON.stringify(results);
+
+    if(!firstLoad && hash !== lastHash){
+      beep();
+    }
+
+    firstLoad = false;
+    lastHash = hash;
+
+    app.innerHTML = "";
+
+    /* ================= GERAL ================= */
+
+    const geralRows =
+      results[0].table.rows || [];
+
+    const grid =
+      document.createElement("div");
+
+    grid.className =
+      "grid-geral";
+
+    grid.innerHTML =
+
+      createCard(
+
+        "VEÍCULOS",
+
+        [
+          "TRAIL TXN1I89",
+          "CRETA TXJ6F18",
+          "CRETA TXJ6F19",
+          "CRETA TXJ6F20"
+        ],
+
+        geralRows,
+
+        [0,1,2,3]
+      )
+
+      +
+
+      createCard(
+
+        "MOTORISTAS",
+
+        [
+          "CACIO",
+          "CELSO",
+          "NEI"
+        ],
+
+        geralRows,
+
+        [4,5,6]
+      );
+
+    app.appendChild(grid);
+
+    /* ================= DEMAIS TABELAS ================= */
+
+    results.slice(1).forEach((d,i)=>{
+
+      const tab =
+        TABS[i + 1];
+
+      const card =
+        document.createElement("section");
+
+      card.className = "card";
+
+      card.innerHTML = `
+
+        <h2>${tab.title}</h2>
+
+        ${renderTable(
+          tab.headers,
+          d.table.rows || []
+        )}
+
+      `;
+
+      app.appendChild(card);
+    });
+
+  }catch(err){
+
+    console.error(err);
+
+    app.innerHTML =
+      "<div>Erro ao carregar dados.</div>";
+  }
+}
+
+/* ================= CLOCK ================= */
 
 function updateClock(){
 
@@ -551,7 +588,10 @@ function updateClock(){
 }
 
 updateClock();
+
 setInterval(updateClock,1000);
+
+/* ================= INIT ================= */
 
 loadAll();
 
@@ -561,6 +601,3 @@ setInterval(
 );
 
 </script>
-
-</body>
-</html>

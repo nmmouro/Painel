@@ -378,6 +378,55 @@ function renderTable(headers, rows){
   `;
 }
 
+function renderVerticalTable(headers, rows, indexes){
+
+  let html = `
+
+    <table>
+
+      <tbody>
+
+  `;
+
+  headers.forEach((header, colIndex) => {
+
+    html += `
+
+      <tr>
+
+        <th>${header}</th>
+
+    `;
+
+    rows.forEach(row => {
+
+      const cell =
+        row.c?.[indexes[colIndex]] || { v:"" };
+
+      html += `
+
+        <td class="${getClass(val(cell))}">
+          ${val(cell)}
+        </td>
+
+      `;
+    });
+
+    html += `</tr>`;
+
+  });
+
+  html += `
+
+      </tbody>
+
+    </table>
+
+  `;
+
+  return html;
+}
+  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -429,50 +478,32 @@ document.getElementById(
 
 function createCard(title, headers, rows, indexes){
 
-const linhas = [];
+  const validRows = rows.filter(r =>
 
-for(let linha = 0; linha < rows.length; linha++){
+    indexes.some(i =>
 
-```
-const cols = [];
+      String(
+        val(r.c?.[i] || { v:"" })
+      ).trim() !== ""
 
-indexes.forEach(i => {
-
-  cols.push(
-    rows[linha]?.c?.[i] || { v:"" }
+    )
   );
 
-});
+  return `
 
-const temValor = cols.some(c =>
+    <section class="card">
 
-  String(val(c)).trim() !== ""
+      <h2>${title}</h2>
 
-);
+      ${renderVerticalTable(
+        headers,
+        validRows,
+        indexes
+      )}
 
-if(temValor){
+    </section>
 
-  linhas.push({
-    c: cols
-  });
-}
-```
-
-}
-
-return `
-
-```
-<section class="card">
-
-  <h2>${title}</h2>
-
-  ${renderTable(headers, linhas)}
-
-</section>
-```
-
-`;
+  `;
 }
 
 

@@ -500,23 +500,132 @@ function createCard(title, headers, rows, indexes){
     )
   );
 
-  return `
+  let html = `
 
     <section class="card">
 
       <h2>${title}</h2>
 
-      ${renderVerticalTable(
-        headers,
-        validRows,
-        indexes
-      )}
+      <div class="table-wrap">
+
+        <table>
+
+  `;
+
+  /* ================= VEÍCULOS ================= */
+
+  if(title === "VEÍCULOS"){
+
+    html += `
+
+      <thead>
+
+        <tr>
+
+          <th>VEÍCULOS</th>
+          <th>STATUS</th>
+          <th>ODÔMETRO</th>
+          <th>COMBUSTÍVEL</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+    `;
+
+    headers.forEach((header, idx) => {
+
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(validRows[0]?.c?.[indexes[idx]] || {v:""})
+          )}">
+            ${val(validRows[0]?.c?.[indexes[idx]] || {v:""})}
+          </td>
+
+          <td>
+            ${val(validRows[1]?.c?.[indexes[idx]] || {v:""})}
+          </td>
+
+          <td>
+            ${val(validRows[2]?.c?.[indexes[idx]] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
+  }
+
+  /* ================= MOTORISTAS ================= */
+
+  if(title === "MOTORISTAS"){
+
+    html += `
+
+      <thead>
+
+        <tr>
+
+          <th>MOTORISTAS</th>
+          <th>STATUS</th>
+          <th>OUTROS</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+    `;
+
+    headers.forEach((header, idx) => {
+
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(validRows[0]?.c?.[indexes[idx]] || {v:""})
+          )}">
+            ${val(validRows[0]?.c?.[indexes[idx]] || {v:""})}
+          </td>
+
+          <td>
+            ${val(validRows[1]?.c?.[indexes[idx]] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
+  }
+
+  html += `
+
+        </table>
+
+      </div>
 
     </section>
 
   `;
-}
 
+  return html;
+}
+  
 /* ================= AUDIO ================= */
 
 let lastHash = "";

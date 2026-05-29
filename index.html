@@ -696,14 +696,14 @@ async function loadAll(){
 
     /* ================= GERAL ================= */
 
-    const geralRows =
-      results[0].table.rows || [];
+  const grid = document.createElement("div");
+grid.className = "grid-geral";
 
-   const veiculosCard =
-  document.createElement("div");
+/* CARD VEÍCULOS */
 
-veiculosCard.innerHTML =
+const veiculosDiv = document.createElement("div");
 
+veiculosDiv.innerHTML =
   createCard(
     "VEÍCULOS",
     [
@@ -716,15 +716,15 @@ veiculosCard.innerHTML =
     [0,1,2,3]
   );
 
-app.appendChild(
-  veiculosCard.firstElementChild
+grid.appendChild(
+  veiculosDiv.firstElementChild
 );
 
-const motoristasCard =
-  document.createElement("div");
+/* CARD MOTORISTAS */
 
-motoristasCard.innerHTML =
+const motoristasDiv = document.createElement("div");
 
+motoristasDiv.innerHTML =
   createCard(
     "MOTORISTAS",
     [
@@ -736,9 +736,11 @@ motoristasCard.innerHTML =
     [4,5,6]
   );
 
-app.appendChild(
-  motoristasCard.firstElementChild
+grid.appendChild(
+  motoristasDiv.firstElementChild
 );
+
+app.appendChild(grid);
 
     /* ================= OUTRAS TABELAS ================= */
 

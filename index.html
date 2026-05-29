@@ -699,48 +699,46 @@ async function loadAll(){
     const geralRows =
       results[0].table.rows || [];
 
-    const grid =
-      document.createElement("div");
+   const veiculosCard =
+  document.createElement("div");
 
-    grid.className =
-      "grid-geral";
+veiculosCard.innerHTML =
 
-    grid.innerHTML =
+  createCard(
+    "VEÍCULOS",
+    [
+      "TRAIL TXN1I89",
+      "CRETA TXJ6F18",
+      "CRETA TXJ6F19",
+      "CRETA TXJ6F20"
+    ],
+    geralRows,
+    [0,1,2,3]
+  );
 
-      createCard(
+app.appendChild(
+  veiculosCard.firstElementChild
+);
 
-        "VEÍCULOS",
+const motoristasCard =
+  document.createElement("div");
 
-        [
-          "TRAIL TXN1I89",
-          "CRETA TXJ6F18",
-          "CRETA TXJ6F19",
-          "CRETA TXJ6F20"
-        ],
+motoristasCard.innerHTML =
 
-        geralRows,
+  createCard(
+    "MOTORISTAS",
+    [
+      "CACIO",
+      "CELSO",
+      "NEI"
+    ],
+    geralRows,
+    [4,5,6]
+  );
 
-        [0,1,2,3]
-      )
-
-      +
-
-      createCard(
-
-        "MOTORISTAS",
-
-        [
-          "CACIO",
-          "CELSO",
-          "NEI"
-        ],
-
-        geralRows,
-
-        [4,5,6]
-      );
-
-    app.appendChild(grid);
+app.appendChild(
+  motoristasCard.firstElementChild
+);
 
     /* ================= OUTRAS TABELAS ================= */
 

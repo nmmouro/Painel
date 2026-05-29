@@ -487,9 +487,15 @@ function renderVerticalTable(headers, rows, indexes){
 
 /* ================= CARD VERTICAL ================= */
 
-function createCard(title, headers, rows, indexes){
+function createCard(title, headers, rows){
 
-  let html = `
+  const validRows = rows.filter(r =>
+    (r.c || []).some(c =>
+      String(val(c)).trim() !== ""
+    )
+  );
+
+  return `
 
     <section class="card">
 
@@ -499,114 +505,37 @@ function createCard(title, headers, rows, indexes){
 
         <table>
 
-  `;
+          <thead>
 
-  /* ================= VEÍCULOS ================= */
+            <tr>
 
-  if(title === "VEÍCULOS"){
+              ${headers.map(h => `
+                <th>${h}</th>
+              `).join("")}
 
-    html += `
+            </tr>
 
-      <thead>
+          </thead>
 
-        <tr>
+          <tbody>
 
-          <th>VEÍCULOS</th>
-          <th>STATUS</th>
-          <th>ODÔMETRO</th>
-          <th>COMBUSTÍVEL</th>
+            ${validRows.map(r => `
 
-        </tr>
+              <tr>
 
-      </thead>
+                ${(r.c || []).map(c => `
 
-      <tbody>
+                  <td class="${getClass(val(c))}">
+                    ${val(c)}
+                  </td>
 
-    `;
+                `).join("")}
 
-    headers.forEach((header, idx) => {
+              </tr>
 
-      const coluna = indexes[idx];
+            `).join("")}
 
-      html += `
-
-        <tr>
-
-          <td>${header}</td>
-
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
-
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
-
-          <td>
-            ${val(rows[2]?.c?.[coluna] || {v:""})}
-          </td>
-
-        </tr>
-
-      `;
-    });
-
-    html += `</tbody>`;
-  }
-
-  /* ================= MOTORISTAS ================= */
-
-  if(title === "MOTORISTAS"){
-
-    html += `
-
-      <thead>
-
-        <tr>
-
-          <th>MOTORISTAS</th>
-          <th>STATUS</th>
-          <th>OUTROS</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-    `;
-
-    headers.forEach((header, idx) => {
-
-      const coluna = indexes[idx];
-
-      html += `
-
-        <tr>
-
-          <td>${header}</td>
-
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
-
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
-
-        </tr>
-
-      `;
-    });
-
-    html += `</tbody>`;
-  }
-
-  html += `
+          </tbody>
 
         </table>
 
@@ -615,10 +544,7 @@ function createCard(title, headers, rows, indexes){
     </section>
 
   `;
-
-  return html;
-}
-  
+}  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -705,16 +631,15 @@ const veiculosDiv = document.createElement("div");
 
 veiculosDiv.innerHTML =
   createCard(
-    "VEÍCULOS",
-    [
-      "TRAIL TXN1I89",
-      "CRETA TXJ6F18",
-      "CRETA TXJ6F19",
-      "CRETA TXJ6F20"
-    ],
-    geralRows,
-    [0,1,2,3]
-  );
+  "VEÍCULOS",
+  [
+    "VEÍCULO",
+    "STATUS",
+    "ODÔMETRO",
+    "COMBUSTÍVEL"
+  ],
+  geralRows.slice(0,4)
+)
 
 grid.appendChild(
   veiculosDiv.firstElementChild
@@ -726,15 +651,14 @@ const motoristasDiv = document.createElement("div");
 
 motoristasDiv.innerHTML =
   createCard(
-    "MOTORISTAS",
-    [
-      "CACIO",
-      "CELSO",
-      "NEI"
-    ],
-    geralRows,
-    [4,5,6]
-  );
+  "MOTORISTAS",
+  [
+    "MOTORISTA",
+    "STATUS",
+    "OUTROS"
+  ],
+  geralRows.slice(4)
+)
 
 grid.appendChild(
   motoristasDiv.firstElementChild
@@ -806,6 +730,9 @@ setInterval(
   loadAll,
   CONFIG.REFRESH_INTERVAL
 );
+  const geralRows =
+  results[0].table.rows || [];
+  app.innerHTML = "";
 
 </script>
 

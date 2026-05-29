@@ -415,9 +415,9 @@ function renderVerticalTable(headers, rows, indexes){
             <th>VEÍCULOS</th>
 
             ${rows.map(() => `
-              <th>v1</th>
-              <th>v2</th>
-              <th>v3</th>
+              <th>STATUS</th>
+              <th>ODÔMETRO</th>
+              <th>COMBUSTÍVEL</th>
             `).join("")}
 
           </tr>
@@ -511,11 +511,10 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>*</th>
-
-          ${headers.map(v=>`
-            <th>${v}</th>
-          `).join("")}
+          <th>VEÍCULOS</th>
+          <th>STATUS</th>
+          <th>ODÔMETRO</th>
+          <th>COMBUSTÍVEL</th>
 
         </tr>
 
@@ -523,59 +522,38 @@ function createCard(title, headers, rows, indexes){
 
       <tbody>
 
-        <tr>
-
-          <th>STATUS</th>
-
-          ${indexes.map(col=>`
-
-            <td class="${getClass(
-              val(rows[0]?.c?.[col] || {v:""})
-            )}">
-
-              ${val(rows[0]?.c?.[col] || {v:""})}
-
-            </td>
-
-          `).join("")}
-
-        </tr>
-
-        <tr>
-
-          <th>ODÔMETRO</th>
-
-          ${indexes.map(col=>`
-
-            <td>
-
-              ${val(rows[1]?.c?.[col] || {v:""})}
-
-            </td>
-
-          `).join("")}
-
-        </tr>
-
-        <tr>
-
-          <th>COMBUSTÍVEL</th>
-
-          ${indexes.map(col=>`
-
-            <td>
-
-              ${val(rows[2]?.c?.[col] || {v:""})}
-
-            </td>
-
-          `).join("")}
-
-        </tr>
-
-      </tbody>
-
     `;
+
+    headers.forEach((header, idx) => {
+
+      const coluna = indexes[idx];
+
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[2]?.c?.[coluna] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
   }
 
   /* ================= MOTORISTAS ================= */
@@ -588,11 +566,9 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>CAMPO</th>
-
-          ${headers.map(v=>`
-            <th>${v}</th>
-          `).join("")}
+          <th>MOTORISTAS</th>
+          <th>STATUS</th>
+          <th>OUTROS</th>
 
         </tr>
 
@@ -600,43 +576,34 @@ function createCard(title, headers, rows, indexes){
 
       <tbody>
 
-        <tr>
-
-          <th>STATUS</th>
-
-          ${indexes.map(col=>`
-
-            <td class="${getClass(
-              val(rows[0]?.c?.[col] || {v:""})
-            )}">
-
-              ${val(rows[0]?.c?.[col] || {v:""})}
-
-            </td>
-
-          `).join("")}
-
-        </tr>
-
-        <tr>
-
-          <th>OUTROS</th>
-
-          ${indexes.map(col=>`
-
-            <td>
-
-              ${val(rows[1]?.c?.[col] || {v:""})}
-
-            </td>
-
-          `).join("")}
-
-        </tr>
-
-      </tbody>
-
     `;
+
+    headers.forEach((header, idx) => {
+
+      const coluna = indexes[idx];
+
+      html += `
+
+        <tr>
+
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
   }
 
   html += `
@@ -650,7 +617,8 @@ function createCard(title, headers, rows, indexes){
   `;
 
   return html;
-}  
+}
+  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -838,7 +806,6 @@ setInterval(
   loadAll,
   CONFIG.REFRESH_INTERVAL
 );
-  
 
 </script>
 

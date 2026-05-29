@@ -429,34 +429,46 @@ document.getElementById(
 
 function createCard(title, headers, rows, indexes){
 
-  const filteredRows = rows.map(r => {
+const linhas = [];
 
-    return {
+for(let linha = 0; linha < rows.length; linha++){
 
-      c: indexes.map(i => {
+```
+const novaLinha = {
 
-        return r.c?.[i] || { v:"" };
+  c: indexes.map(i => {
 
-      })
-    };
+    return rows[linha]?.c?.[i] || { v:"" };
 
-  }).filter(r =>
+  })
+};
 
-    r.c.some(c =>
-      String(val(c)).trim() !== ""
-    )
-  );
+const temValor = novaLinha.c.some(c =>
 
-  return `
+  String(val(c)).trim() !== ""
 
-    <section class="card">
+);
 
-      <h2>${title}</h2>
+if(temValor){
+  linhas.push(novaLinha);
+}
+```
 
-      ${renderTable(headers, filteredRows)}
+}
 
-    </section>
-  `;
+return `
+
+```
+<section class="card">
+
+  <h2>${title}</h2>
+
+  ${renderTable(headers, linhas)}
+
+</section>
+```
+
+`;
 }
 
 /* ================= LOAD ================= */

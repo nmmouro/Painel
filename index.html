@@ -489,17 +489,6 @@ function renderVerticalTable(headers, rows, indexes){
 
 function createCard(title, headers, rows, indexes){
 
-  const validRows = rows.filter(r =>
-
-    indexes.some(i =>
-
-      String(
-        val(r.c?.[i] || { v:"" })
-      ).trim() !== ""
-
-    )
-  );
-
   let html = `
 
     <section class="card">
@@ -537,24 +526,33 @@ function createCard(title, headers, rows, indexes){
 
     headers.forEach((header, idx) => {
 
+      const col = indexes[idx];
+
+      const status =
+        rows[0]?.c?.[col] || { v:"" };
+
+      const km =
+        rows[1]?.c?.[col] || { v:"" };
+
+      const combustivel =
+        rows[2]?.c?.[col] || { v:"" };
+
       html += `
 
         <tr>
 
           <td>${header}</td>
 
-          <td class="${getClass(
-            val(validRows[0]?.c?.[indexes[idx]] || {v:""})
-          )}">
-            ${val(validRows[0]?.c?.[indexes[idx]] || {v:""})}
+          <td class="${getClass(val(status))}">
+            ${val(status)}
           </td>
 
           <td>
-            ${val(validRows[1]?.c?.[indexes[idx]] || {v:""})}
+            ${val(km)}
           </td>
 
           <td>
-            ${val(validRows[2]?.c?.[indexes[idx]] || {v:""})}
+            ${val(combustivel)}
           </td>
 
         </tr>
@@ -589,20 +587,26 @@ function createCard(title, headers, rows, indexes){
 
     headers.forEach((header, idx) => {
 
+      const col = indexes[idx];
+
+      const status =
+        rows[0]?.c?.[col] || { v:"" };
+
+      const outros =
+        rows[1]?.c?.[col] || { v:"" };
+
       html += `
 
         <tr>
 
           <td>${header}</td>
 
-          <td class="${getClass(
-            val(validRows[0]?.c?.[indexes[idx]] || {v:""})
-          )}">
-            ${val(validRows[0]?.c?.[indexes[idx]] || {v:""})}
+          <td class="${getClass(val(status))}">
+            ${val(status)}
           </td>
 
           <td>
-            ${val(validRows[1]?.c?.[indexes[idx]] || {v:""})}
+            ${val(outros)}
           </td>
 
         </tr>

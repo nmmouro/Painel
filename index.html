@@ -435,8 +435,13 @@ async function loadAll(){
 
   app.innerHTML = "";
 
-  const geral =
-    results[0].table.rows || [];
+ const geral =
+  (results[0].table.rows || []).filter(r =>
+
+    (r.c || []).some(c =>
+      String(val(c)).trim() !== ""
+    )
+  );
 
   const grid =
     document.createElement("div");
@@ -444,33 +449,35 @@ async function loadAll(){
   grid.className =
     "grid-geral";
 
-  const createCard =
-    (title,headers,indexes)=>{
+  const createCard = (title, headers, indexes) => {
 
-      const card =
-        document.createElement("section");
+  const card = document.createElement("section");
 
-      card.className = "card";
+  card.className = "card";
 
-      card.innerHTML = `
+  const rows = geral.map(r => {
 
-        <h2>${title}</h2>
-
-        ${renderTable(
-
-          headers,
-
-          geral.map(r=>({
-            c:indexes.map(i =>
-              r.c?.[i] || {v:""}
-            )
-          }))
-        )}
-
-      `;
-
-      return card;
+    return {
+      c: indexes.map(i => r.c?.[i] || { v:"" })
     };
+
+  }).filter(r =>
+
+    r.c.some(c =>
+      String(val(c)).trim() !== ""
+    )
+  );
+
+  card.innerHTML = `
+
+    <h2>${title}</h2>
+
+    ${renderTable(headers, rows)}
+
+  `;
+
+  return card;
+};
 
   grid.appendChild(
 

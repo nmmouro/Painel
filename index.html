@@ -408,6 +408,22 @@ function renderVerticalTable(headers, rows, indexes){
 
       <table>
 
+        <thead>
+
+          <tr>
+
+            <th>VEÍCULOS</th>
+
+            ${rows.map(() => `
+              <th>STATUS</th>
+              <th>ODÔMETRO</th>
+              <th>COMBUSTÍVEL</th>
+            `).join("")}
+
+          </tr>
+
+        </thead>
+
         <tbody>
 
   `;
@@ -424,13 +440,30 @@ function renderVerticalTable(headers, rows, indexes){
 
     rows.forEach(row => {
 
-      const cell =
-        row.c?.[indexes[colIndex]] || { v:"" };
+      const base =
+        indexes[colIndex];
+
+      const status =
+        row.c?.[base] || { v:"" };
+
+      const odometro =
+        row.c?.[base + 1] || { v:"" };
+
+      const combustivel =
+        row.c?.[base + 2] || { v:"" };
 
       html += `
 
-        <td class="${getClass(val(cell))}">
-          ${val(cell)}
+        <td class="${getClass(val(status))}">
+          ${val(status)}
+        </td>
+
+        <td>
+          ${val(odometro)}
+        </td>
+
+        <td>
+          ${val(combustivel)}
         </td>
 
       `;

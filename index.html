@@ -511,10 +511,11 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>VEÍCULOS</th>
-          <th>STATUS</th>
-          <th>ODÔMETRO</th>
-          <th>COMBUSTÍVEL</th>
+          <th>CAMPO</th>
+
+          ${headers.map(v=>`
+            <th>${v}</th>
+          `).join("")}
 
         </tr>
 
@@ -522,38 +523,59 @@ function createCard(title, headers, rows, indexes){
 
       <tbody>
 
-    `;
-
-    headers.forEach((header, idx) => {
-
-      const coluna = indexes[idx];
-
-      html += `
-
         <tr>
 
-          <td>${header}</td>
+          <th>STATUS</th>
 
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
+          ${indexes.map(col=>`
 
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
+            <td class="${getClass(
+              val(rows[0]?.c?.[col] || {v:""})
+            )}">
 
-          <td>
-            ${val(rows[2]?.c?.[coluna] || {v:""})}
-          </td>
+              ${val(rows[0]?.c?.[col] || {v:""})}
+
+            </td>
+
+          `).join("")}
 
         </tr>
 
-      `;
-    });
+        <tr>
 
-    html += `</tbody>`;
+          <th>ODÔMETRO</th>
+
+          ${indexes.map(col=>`
+
+            <td>
+
+              ${val(rows[1]?.c?.[col] || {v:""})}
+
+            </td>
+
+          `).join("")}
+
+        </tr>
+
+        <tr>
+
+          <th>COMBUSTÍVEL</th>
+
+          ${indexes.map(col=>`
+
+            <td>
+
+              ${val(rows[2]?.c?.[col] || {v:""})}
+
+            </td>
+
+          `).join("")}
+
+        </tr>
+
+      </tbody>
+
+    `;
   }
 
   /* ================= MOTORISTAS ================= */
@@ -566,9 +588,11 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>MOTORISTAS</th>
-          <th>STATUS</th>
-          <th>OUTROS</th>
+          <th>CAMPO</th>
+
+          ${headers.map(v=>`
+            <th>${v}</th>
+          `).join("")}
 
         </tr>
 
@@ -576,34 +600,43 @@ function createCard(title, headers, rows, indexes){
 
       <tbody>
 
-    `;
-
-    headers.forEach((header, idx) => {
-
-      const coluna = indexes[idx];
-
-      html += `
-
         <tr>
 
-          <td>${header}</td>
+          <th>STATUS</th>
 
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
+          ${indexes.map(col=>`
 
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
+            <td class="${getClass(
+              val(rows[0]?.c?.[col] || {v:""})
+            )}">
+
+              ${val(rows[0]?.c?.[col] || {v:""})}
+
+            </td>
+
+          `).join("")}
 
         </tr>
 
-      `;
-    });
+        <tr>
 
-    html += `</tbody>`;
+          <th>OUTROS</th>
+
+          ${indexes.map(col=>`
+
+            <td>
+
+              ${val(rows[1]?.c?.[col] || {v:""})}
+
+            </td>
+
+          `).join("")}
+
+        </tr>
+
+      </tbody>
+
+    `;
   }
 
   html += `
@@ -617,8 +650,7 @@ function createCard(title, headers, rows, indexes){
   `;
 
   return html;
-}
-  
+}  
 /* ================= AUDIO ================= */
 
 let lastHash = "";

@@ -434,23 +434,27 @@ const linhas = [];
 for(let linha = 0; linha < rows.length; linha++){
 
 ```
-const novaLinha = {
+const cols = [];
 
-  c: indexes.map(i => {
+indexes.forEach(i => {
 
-    return rows[linha]?.c?.[i] || { v:"" };
+  cols.push(
+    rows[linha]?.c?.[i] || { v:"" }
+  );
 
-  })
-};
+});
 
-const temValor = novaLinha.c.some(c =>
+const temValor = cols.some(c =>
 
   String(val(c)).trim() !== ""
 
 );
 
 if(temValor){
-  linhas.push(novaLinha);
+
+  linhas.push({
+    c: cols
+  });
 }
 ```
 
@@ -470,6 +474,7 @@ return `
 
 `;
 }
+
 
 /* ================= LOAD ================= */
 

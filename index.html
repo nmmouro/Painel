@@ -1,6 +1,3 @@
-PAINEL COM DIVISÃO MOTORISTA/ VEÍCULOS
-
-
 <!doctype html>
 <html lang="pt-BR">
 
@@ -774,12 +771,7 @@ async function loadAll(){
     const geralRows =
       results[0].table.rows || [];
 
-console.log(
-  geralRows.map(r =>
-    (r.c || []).map(c => c?.v)
-  )
-);
-    
+   
 
     const grid =
       document.createElement("div");

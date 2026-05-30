@@ -10,27 +10,19 @@
 
 <style>
 
-/* ================= ROOT ================= */
-
 :root{
-
   --bg:#071029;
   --card:#0b1a3a;
   --table:#0e224d;
-  --table-alt:#0c1d40;
+  --table2:#0c1d40;
   --header:#2c4078;
   --border:#1e2f5c;
 
-  --text:#ffffff;
-  --muted:#9fb3ff;
-
+  --white:#fff;
   --green:#00ff9c;
-  --yellow:#ffcc00;
   --red:#ff4d4d;
-  --lime:#7CFC00;
+  --blue:#4da6ff;
 }
-
-/* ================= RESET ================= */
 
 *{
   margin:0;
@@ -39,362 +31,162 @@
 }
 
 body{
-
   background:var(--bg);
-  color:var(--text);
-
-  font-family:Inter,Arial,sans-serif;
-
+  color:var(--white);
+  font-family:Arial,sans-serif;
   height:100vh;
   overflow:hidden;
 }
 
-/* ================= HEADER ================= */
-
 .topbar{
-
-  display:grid;
-
-  grid-template-columns:
-    180px 1fr 250px;
-
-  gap:16px;
-
-  align-items:center;
-
-  padding:14px 20px;
-
-  background:#020617;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.1);
-}
-
-/* LEFT */
-
-.left{
   display:flex;
+  justify-content:space-between;
   align-items:center;
+  gap:10px;
+  padding:12px 20px;
+  background:#020617;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .logo{
-  height:65px;
-  object-fit:contain;
-}
-
-/* CENTER */
-
-.center{
-
-  display:flex;
-  flex-direction:column;
-
-  align-items:center;
-  justify-content:center;
+  height:55px;
 }
 
 .title{
-
-  font-size:30px;
-  font-weight:700;
-
-  letter-spacing:1px;
-}
-
-/* STATUS EMPREGADOS */
-
-#status-empregados{
-
-  display:flex;
-  flex-wrap:wrap;
-
-  justify-content:center;
-
-  gap:20px;
-
-  margin-top:10px;
-}
-
-.badge{
-
-  padding:6px 10px;
-
-  border-radius:10px;
-
-  font-size:16px;
+  font-size:28px;
   font-weight:700;
 }
-
-.ocupado{
-  background:rgba(255,77,77,.15);
-  color:var(--red);
-}
-
-.livre{
-  background:rgba(0,255,156,.15);
-  color:var(--green);
-}
-
-/* RIGHT */
 
 .right{
-
   display:flex;
-  flex-direction:column;
-
-  align-items:flex-end;
-
+  align-items:center;
   gap:10px;
 }
 
 #clock{
-
-  font-size:24px;
+  font-size:20px;
   font-weight:700;
-
-  color:var(--muted);
-}
-
-.actions{
-
-  display:flex;
-  gap:10px;
 }
 
 button{
-
   border:none;
   border-radius:10px;
-
-  padding:8px 14px;
-
+  padding:8px 12px;
   cursor:pointer;
-
   font-weight:700;
-
-  transition:.2s;
 }
 
-button:hover{
-  transform:scale(1.03);
-}
-
-/* BUTTON OFF */
-
-button.off{
-
+.off{
   background:#ff4d4d;
-
-  color:#ffffff;
-
-  box-shadow:
-    0 0 10px rgba(255,77,77,.5);
+  color:#fff;
 }
-
-/* ================= MAIN ================= */
 
 main{
-
   display:grid;
-
-  gap:14px;
-
-  padding:12px;
-
-  height:calc(100vh - 120px);
-
+  gap:10px;
+  padding:10px;
+  height:calc(100vh - 90px);
   overflow:auto;
 }
-
-/* ================= GRID GERAL ================= */
 
 .grid-geral{
-
   display:grid;
-
   grid-template-columns:1fr 1fr;
-
-  gap:14px;
+  gap:10px;
 }
 
-/* ================= CARD ================= */
-
 .card{
-
   background:var(--card);
-
   border-radius:16px;
-
-  overflow:auto;
-
-  border:
-    1px solid rgba(255,255,255,.08);
-
-  box-shadow:
-    0 4px 20px rgba(0,0,0,.35);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
 }
 
 .card h2{
-
   text-align:center;
-
-  padding:12px;
-
+  padding:10px;
   font-size:22px;
 }
 
-/* ================= TABLE ================= */
+.table-wrap{
+  overflow:auto;
+}
 
 table{
-
   width:100%;
-
   border-collapse:collapse;
 }
 
 thead th{
-
-  position:sticky;
-  top:0;
-
   background:var(--header);
+  padding:10px;
+  border:1px solid var(--border);
+  font-size:18px;
+  white-space:nowrap;
+}
 
-  padding:12px;
-
-  border:
-    1px solid var(--border);
-
-  font-size:15px;
+tbody th{
+  background:var(--header);
+  padding:10px;
+  border:1px solid var(--border);
+  font-size:18px;
+  white-space:nowrap;
 }
 
 tbody td{
-
-  padding:12px;
-
-  border:
-    1px solid var(--border);
-
+  padding:10px;
+  border:1px solid var(--border);
   background:var(--table);
-
   text-align:center;
+  font-size:20px;
+  font-weight:700;
+  white-space:nowrap;
 }
 
 tbody tr:nth-child(even) td{
-  background:var(--table-alt);
+  background:var(--table2);
 }
 
-/* ================= STATUS ROWS ================= */
-
-.status-atendido td{
-  background:rgba(0,255,156,.10);
+.status-manutencao{
+  color:var(--blue);
 }
 
-.status-andamento td{
-  background:rgba(255,204,0,.10);
+.status-ocupado{
+  color:var(--red);
 }
 
-.status-cancelado td{
-  background:rgba(255,77,77,.12);
+.status-livre{
+  color:var(--green);
 }
-
-.status-concluido td{
-  background:rgba(124,252,0,.10);
-}
-
-.status-manutencao td{
-  background:rgba(255,140,0,.10);
-}
-
-/* ================= STATUS ICON ================= */
-
-.status-icon{
-
-  font-size:24px;
-
-  font-weight:700;
-
-  text-align:center;
-}
-
-/* ================= MOBILE ================= */
 
 @media(max-width:768px){
-
-  .topbar{
-
-    grid-template-columns:auto auto auto;
-
-    text-align:center;
-  }
-
-  .left,
-  .center,
-  .right{
-
-    justify-content:center;
-    align-items:center;
-  }
-
-  .right{
-    align-items:center;
-  }
-
-  .title{
-    font-size:12px;
-  }
-
-  #status-empregados{
-
-    gap:4px;
-
-    margin-top:6px;
-  }
-
-  #status-empregados .badge{
-
-    font-size:8px;
-
-    padding:3px 6px;
-
-    border-radius:6px;
-  }
-
-  #clock{
-    font-size:8px;
-  }
-
-  .logo{
-    height:20px;
-  }
-
-  .actions button{
-
-    font-size:4px;
-
-    padding:4px 6px;
-
-    border-radius:2px;
-  }
-
-  table{
-    font-size:10px;
-  }
-
-  thead th,
-  tbody td{
-    padding:8px;
-  }
-
-  .card h2{
-    font-size:12px;
-  }
 
   .grid-geral{
     grid-template-columns:1fr;
   }
 
-  .status-icon{
-    font-size:18px;
+  .title{
+    font-size:14px;
+  }
+
+  .logo{
+    height:28px;
+  }
+
+  #clock{
+    font-size:11px;
+  }
+
+  button{
+    font-size:10px;
+    padding:4px 6px;
+  }
+
+  thead th,
+  tbody th,
+  tbody td{
+    font-size:10px;
+    padding:6px;
   }
 }
 
@@ -408,51 +200,33 @@ tbody tr:nth-child(even) td{
   <source src="./alerta.mp3" type="audio/mpeg">
 </audio>
 
-<!-- ================= HEADER ================= -->
-
 <header class="topbar">
 
-  <div class="left">
+  <img
+    src="logo.png"
+    class="logo"
+    onerror="this.style.display='none'"
+  >
 
-    <img
-      src="logo.png"
-      class="logo"
-      onerror="this.style.display='none'"
-    >
-
-  </div>
-
-  <div class="center">
-
-    <div class="title">
-      MOVIMENTAÇÃO DIÁRIA
-    </div>
-
-    <div id="status-empregados"></div>
-
+  <div class="title">
+    MOVIMENTAÇÃO DIÁRIA
   </div>
 
   <div class="right">
 
     <div id="clock"></div>
 
-    <div class="actions">
+    <button id="toggle-audio">
+      🔊 SOM
+    </button>
 
-      <button id="toggle-audio">
-        🔊 SOM ON
-      </button>
-
-      <button id="toggle-fullscreen">
-        ⛶ TELA CHEIA
-      </button>
-
-    </div>
+    <button id="toggle-fullscreen">
+      ⛶ TELA
+    </button>
 
   </div>
 
 </header>
-
-<!-- ================= MAIN ================= -->
 
 <main id="app"></main>
 
@@ -472,13 +246,9 @@ const CONFIG = {
 
 const TABS = [
 
-  {
-    id:"geral",
-    sheet:"GERAL"
-  },
+  { sheet:"GERAL" },
 
   {
-    id:"painel",
     title:"PAINEL",
     sheet:"PAINEL",
 
@@ -487,14 +257,13 @@ const TABS = [
       "Hora",
       "Veículo",
       "Empregado",
-      "Passageiro/ Setor/ Motivo",
+      "Passageiro",
       "Itinerário",
       "Status"
     ]
   },
 
   {
-    id:"agenda",
     title:"AGENDA DO DIA",
     sheet:"AGENDA DO DIA",
 
@@ -510,7 +279,6 @@ const TABS = [
   },
 
   {
-    id:"social",
     title:"AGENDA SERVIÇO SOCIAL",
     sheet:"AGENDA SERVIÇO SOCIAL",
 
@@ -525,45 +293,9 @@ const TABS = [
   }
 ];
 
-/* ================= STATUS ================= */
+/* ================= HELPERS ================= */
 
-const STATUS_MAP = {
-
-  atendido:{
-    icon:"✔",
-    class:"status-atendido"
-  },
-
-  concluido:{
-    icon:"✔",
-    class:"status-concluido"
-  },
-
-  andamento:{
-    icon:"⏳",
-    class:"status-andamento"
-  },
-
-  cancelado:{
-    icon:"✖",
-    class:"status-cancelado"
-  },
-
-  manutenção:{
-    icon:"🔧",
-    class:"status-manutencao"
-  }
-};
-
-const EMPREGADOS = [
-  "CACIO",
-  "CELSO",
-  "NEI"
-];
-
-/* ================= UTILS ================= */
-
-const parseGviz = txt =>
+const parse = txt =>
 
   JSON.parse(
     txt.slice(
@@ -572,54 +304,217 @@ const parseGviz = txt =>
     )
   );
 
-const getCellValue = c =>
+const val = c =>
   c?.f ?? c?.v ?? "";
-
-const getStatusKey = (status="") =>
-
-  Object.keys(STATUS_MAP)
-    .find(key =>
-      status.toLowerCase().includes(key)
-    );
-
-const getStatusInfo = status =>
-  STATUS_MAP[getStatusKey(status)] || {};
 
 /* ================= FETCH ================= */
 
 async function fetchSheet(sheet){
 
   const url =
-  `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq` +
-  `?sheet=${encodeURIComponent(sheet)}` +
-  `&tq=select *` +
-  `&headers=0` +
-  `&tqx=out:json`;
 
-  const res = await fetch(url);
+    `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq`+
 
-  if(!res.ok){
-    throw new Error("Erro ao carregar dados");
-  }
+    `?sheet=${encodeURIComponent(sheet)}`+
 
-  return parseGviz(await res.text());
+    `&tqx=out:json`;
+
+  return parse(
+    await (await fetch(url)).text()
+  );
 }
 
-/* ================= TABLE ================= */
+/* ================= STATUS ================= */
 
-function renderTable({headers,rows}){
+function getClass(v){
+
+  const t =
+    String(v).toLowerCase();
+
+  if(t.includes("manutenção"))
+    return "status-manutencao";
+
+  if(t.includes("ocupado"))
+    return "status-ocupado";
+
+  if(t.includes("livre"))
+    return "status-livre";
+
+  return "";
+}
+
+/* ================= TABELAS NORMAIS ================= */
+
+function renderTable(headers, rows){
+
+  const validRows = rows.filter(r =>
+
+    (r.c || []).some(c =>
+      String(val(c)).trim() !== ""
+    )
+  );
 
   return `
 
-    <table>
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            ${headers.map(h => `
+              <th>${h}</th>
+            `).join("")}
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${validRows.map(r => `
+
+            <tr>
+
+              ${(r.c || []).map(c => `
+
+                <td class="${getClass(val(c))}">
+                  ${val(c)}
+                </td>
+
+              `).join("")}
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+/* ================= TABELAS VERTICAIS ================= */
+
+function renderVerticalTable(headers, rows, indexes){
+
+  let html = `
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>VEÍCULOS</th>
+
+            ${rows.map(() => `
+              <th>STATUS</th>
+              <th>ODÔMETRO</th>
+              <th>COMBUSTÍVEL</th>
+            `).join("")}
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+  `;
+
+  headers.forEach((header, colIndex) => {
+
+    html += `
+
+      <tr>
+
+        <th>${header}</th>
+
+    `;
+
+    rows.forEach(row => {
+
+      const base =
+        indexes[colIndex];
+
+      const status =
+        row.c?.[base] || { v:"" };
+
+      const odometro =
+        row.c?.[base + 1] || { v:"" };
+
+      const combustivel =
+        row.c?.[base + 2] || { v:"" };
+
+      html += `
+
+        <td class="${getClass(val(status))}">
+          ${val(status)}
+        </td>
+
+        <td>
+          ${val(odometro)}
+        </td>
+
+        <td>
+          ${val(combustivel)}
+        </td>
+
+      `;
+    });
+
+    html += `</tr>`;
+  });
+
+  html += `
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+  return html;
+}
+
+/* ================= CARD VERTICAL ================= */
+
+function createCard(title, headers, rows, indexes){
+
+  let html = `
+
+    <section class="card">
+
+      <h2>${title}</h2>
+
+      <div class="table-wrap">
+
+        <table>
+
+  `;
+
+  /* ================= VEÍCULOS ================= */
+
+  if(title === "VEÍCULOS"){
+
+    html += `
 
       <thead>
 
         <tr>
 
-          ${headers.map(h => `
-            <th>${h}</th>
-          `).join("")}
+          <th>VEÍCULOS</th>
+          <th>STATUS</th>
+          <th>ODÔMETRO</th>
+          <th>COMBUSTÍVEL</th>
 
         </tr>
 
@@ -627,326 +522,125 @@ function renderTable({headers,rows}){
 
       <tbody>
 
-        ${rows.map(renderRow).join("")}
+    `;
 
-      </tbody>
+    headers.forEach((header, idx) => {
 
-    </table>
-  `;
-}
+      const coluna = indexes[idx];
 
-function renderRow(row){
+      html += `
 
-  const values =
-    (row.c || []).map(getCellValue);
+        <tr>
 
-  if(
-    values.every(v =>
-      !String(v).trim()
-    )
-  ){
-    return "";
+          <td>${header}</td>
+
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+
+          <td>
+            ${val(rows[2]?.c?.[coluna] || {v:""})}
+          </td>
+
+        </tr>
+
+      `;
+    });
+
+    html += `</tbody>`;
   }
 
-  const status =
-    values.at(-1);
+  /* ================= MOTORISTAS ================= */
 
-  const {
-    icon = "",
-    class:css = ""
-  } = getStatusInfo(status);
+  if(title === "MOTORISTAS"){
 
-  return `
+    html += `
 
-    <tr class="${css}">
+      <thead>
 
-      ${values.map((v,i)=>`
+        <tr>
 
-        <td class="
-          ${i === values.length - 1
-            ? "status-icon"
-            : ""}
-        ">
+          <th>MOTORISTAS</th>
+          <th>STATUS</th>
+          <th>OUTROS</th>
 
-          ${i === values.length - 1
-            ? icon
-            : v}
+        </tr>
 
-        </td>
+      </thead>
 
-      `).join("")}
+      <tbody>
 
-    </tr>
-  `;
-}
+    `;
 
-/* ================= EMPREGADOS ================= */
+    headers.forEach((header, idx) => {
 
-function renderEmpregados(rows){
+      const coluna = indexes[idx];
 
-  const ocupados =
-    new Set();
+      html += `
 
-  rows.forEach(r=>{
+        <tr>
 
-    const text =
-      JSON.stringify(r).toUpperCase();
+          <td>${header}</td>
 
-    const status =
-      text.toLowerCase();
+          <td class="${getClass(
+            val(rows[0]?.c?.[coluna] || {v:""})
+          )}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
 
-    if(
-      !status.includes("andamento")
-    ) return;
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
 
-    EMPREGADOS.forEach(emp=>{
+        </tr>
 
-      if(text.includes(emp)){
-        ocupados.add(emp);
-      }
+      `;
     });
-  });
 
-  document.getElementById(
-    "status-empregados"
-  ).innerHTML =
+    html += `</tbody>`;
+  }
 
-    EMPREGADOS.map(nome=>`
+  html += `
 
-      <span class="
-        badge
-        ${ocupados.has(nome)
-          ? "ocupado"
-          : "livre"}
-      ">
+        </table>
 
-        ${nome}
+      </div>
 
-        (${ocupados.has(nome)
-          ? "OCUPADO"
-          : "LIVRE"})
+    </section>
 
-      </span>
+  `;
 
-    `).join("");
+  return html;
 }
-
-/* ================= APP ================= */
+  
+/* ================= AUDIO ================= */
 
 let lastHash = "";
-let isFirstLoad = true;
-
-async function loadAll(){
-
-  const app =
-    document.getElementById("app");
-
-  try{
-
-    const results =
-      await Promise.all(
-        TABS.map(
-          t => fetchSheet(t.sheet)
-        )
-      );
-
-    const currentHash =
-      JSON.stringify(results);
-
-    if(
-      !isFirstLoad &&
-      currentHash !== lastHash
-    ){
-      playBeep();
-    }
-
-    lastHash = currentHash;
-    isFirstLoad = false;
-
-    app.innerHTML = "";
-
-    /* ================= GERAL ================= */
-
-    const geralRows =
-      results[0].table.rows || [];
-
-   
-
-    const grid =
-      document.createElement("div");
-
-    grid.className =
-      "grid-geral";
-
-    /* VEÍCULOS */
-
-    const veiculosCard =
-      document.createElement("section");
-
-    veiculosCard.className =
-      "card";
-
-    veiculosCard.innerHTML = `
-
-      <h2>VEÍCULOS</h2>
-
-      ${renderTable({
-
-        headers:[
-          "V1",
-          "V2",
-          "V3",
-          "V4"
-        ],
-
-        rows:geralRows.map(r=>({
-
-          c:(r.c || []).slice(0,4)
-
-        }))
-      })}
-    `;
-
-    /* MOTORISTAS */
-
-    const motoristasCard =
-      document.createElement("section");
-
-    motoristasCard.className =
-      "card";
-
-    motoristasCard.innerHTML = `
-
-      <h2>MOTORISTAS</h2>
-
-      ${renderTable({
-
-        headers:[
-          "M1",
-          "M2",
-          "M3"
-        ],
-
-        rows:geralRows.map(r=>({
-
-          c:(r.c || []).slice(4,7)
-
-        }))
-      })}
-    `;
-
-    grid.appendChild(
-      veiculosCard
-    );
-
-    grid.appendChild(
-      motoristasCard
-    );
-
-    app.appendChild(grid);
-
-    /* ================= OUTRAS TABELAS ================= */
-
-    results.slice(1).forEach((data,index)=>{
-
-      const tab =
-        TABS[index + 1];
-
-      const rows =
-        data.table.rows || [];
-
-      if(index === 0){
-        renderEmpregados(rows);
-      }
-
-      const section =
-        document.createElement("section");
-
-      section.className =
-        "card";
-
-      section.innerHTML = `
-
-        <h2>${tab.title}</h2>
-
-        ${renderTable({
-          headers:tab.headers,
-          rows
-        })}
-      `;
-
-      app.appendChild(section);
-    });
-
-  }catch(err){
-
-    console.error(err);
-
-    app.innerHTML =
-      "<div>Erro ao carregar dados.</div>";
-  }
-}
-
-/* ================= CLOCK ================= */
-
-function updateClock(){
-
-  const now =
-    new Date();
-
-  document.getElementById(
-    "clock"
-  ).innerText =
-
-    now.toLocaleDateString(
-      "pt-BR"
-    ) +
-
-    " — " +
-
-    now.toLocaleTimeString(
-      "pt-BR",
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
-}
-
-updateClock();
-
-setInterval(
-  updateClock,
-  1000
-);
-
-/* ================= AUDIO ================= */
+let firstLoad = true;
 
 const audio =
   document.getElementById("beep");
 
-const btnAudio =
-  document.getElementById("toggle-audio");
-
 let soundOn = true;
 
-btnAudio.onclick = ()=>{
+document.getElementById(
+  "toggle-audio"
+).onclick = ()=>{
 
   soundOn = !soundOn;
 
-  btnAudio.innerText =
-
-    soundOn
-      ? "🔊 SOM ON"
-      : "🔇 SOM OFF";
-
-  btnAudio.classList.toggle(
-    "off",
-    !soundOn
-  );
+  document
+    .getElementById("toggle-audio")
+    .classList.toggle("off", !soundOn);
 };
 
-function playBeep(){
+function beep(){
 
   if(!soundOn) return;
 
@@ -972,13 +666,142 @@ document.getElementById(
   }
 };
 
+/* ================= LOAD ================= */
+
+async function loadAll(){
+
+  const app =
+    document.getElementById("app");
+
+  try{
+
+    const results =
+      await Promise.all(
+        TABS.map(t =>
+          fetchSheet(t.sheet)
+        )
+      );
+
+    const hash =
+      JSON.stringify(results);
+
+    if(!firstLoad && hash !== lastHash){
+      beep();
+    }
+
+    firstLoad = false;
+    lastHash = hash;
+
+    app.innerHTML = "";
+
+    /* ================= GERAL ================= */
+
+    const geralRows =
+      results[0].table.rows || [];
+
+    const grid =
+      document.createElement("div");
+
+    grid.className =
+      "grid-geral";
+
+    grid.innerHTML =
+
+      createCard(
+
+        "VEÍCULOS",
+
+        [
+          "TRAIL TXN1I89",
+          "CRETA TXJ6F18",
+          "CRETA TXJ6F19",
+          "CRETA TXJ6F20"
+        ],
+
+        geralRows,
+
+        [0,1,2,3]
+      )
+
+      +
+
+      createCard(
+
+        "MOTORISTAS",
+
+        [
+          "CACIO",
+          "CELSO",
+          "NEI"
+        ],
+
+        geralRows,
+
+        [4,5,6]
+      );
+
+    app.appendChild(grid);
+
+    /* ================= OUTRAS TABELAS ================= */
+
+    results.slice(1).forEach((d,i)=>{
+
+      const tab =
+        TABS[i + 1];
+
+      const card =
+        document.createElement("section");
+
+      card.className = "card";
+
+      card.innerHTML = `
+
+        <h2>${tab.title}</h2>
+
+        ${renderTable(
+          tab.headers,
+          d.table.rows || []
+        )}
+
+      `;
+
+      app.appendChild(card);
+    });
+
+  }catch(err){
+
+    console.error(err);
+
+    app.innerHTML =
+      "<div style='padding:20px'>Erro ao carregar dados.</div>";
+  }
+}
+
+/* ================= CLOCK ================= */
+
+function updateClock(){
+
+  document.getElementById(
+    "clock"
+  ).innerText =
+
+    new Date().toLocaleString(
+      "pt-BR",
+      {
+        dateStyle:"short",
+        timeStyle:"short"
+      }
+    );
+}
+
+updateClock();
+
+setInterval(updateClock,1000);
+
 /* ================= INIT ================= */
 
 loadAll();
 
-    (r.c || []).map(getCellValue)
-  )
-);
 setInterval(
   loadAll,
   CONFIG.REFRESH_INTERVAL
@@ -987,4 +810,6 @@ setInterval(
 </script>
 
 </body>
+
 </html>
+

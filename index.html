@@ -496,9 +496,41 @@ function renderVerticalTable(headers, rows, indexes){
   return html;
 }
 
+
+function getRowByName(rows, rowName){
+
+  return rows.find(r =>
+
+    String(
+      val(r.c?.[0] || {})
+    )
+    .trim()
+    .toUpperCase()
+
+    ===
+
+    rowName.toUpperCase()
+
+  );
+
+}
+  
+
 /* ================= CARD VERTICAL ================= */
 
 function createCard(title, headers, rows, indexes){
+
+  const statusRow =
+    getRowByName(rows,"STATUS");
+
+  const odometroRow =
+    getRowByName(rows,"ODÔMETRO");
+
+  const combustivelRow =
+    getRowByName(rows,"COMBUSTÍVEL");
+
+  const automaticoRow =
+    getRowByName(rows,"AUTOMÁTICO");
 
   let html = `
 
@@ -522,7 +554,7 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>VEÍCULOS</th>
+          <th>VEÍCULO</th>
           <th>STATUS</th>
           <th>ODÔMETRO</th>
           <th>COMBUSTÍVEL</th>
@@ -535,7 +567,7 @@ function createCard(title, headers, rows, indexes){
 
     `;
 
-    headers.forEach((header, idx) => {
+    headers.forEach((header, idx)=>{
 
       const coluna = indexes[idx];
 
@@ -546,17 +578,17 @@ function createCard(title, headers, rows, indexes){
           <td>${header}</td>
 
           <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
+            val(statusRow?.c?.[coluna] || {})
           )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
+            ${val(statusRow?.c?.[coluna] || {})}
           </td>
 
           <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
+            ${val(odometroRow?.c?.[coluna] || {})}
           </td>
 
           <td>
-            ${val(rows[2]?.c?.[coluna] || {v:""})}
+            ${val(combustivelRow?.c?.[coluna] || {})}
           </td>
 
         </tr>
@@ -564,7 +596,11 @@ function createCard(title, headers, rows, indexes){
       `;
     });
 
-    html += `</tbody>`;
+    html += `
+
+      </tbody>
+
+    `;
   }
 
   /* ================= MOTORISTAS ================= */
@@ -577,9 +613,9 @@ function createCard(title, headers, rows, indexes){
 
         <tr>
 
-          <th>MOTORISTAS</th>
+          <th>MOTORISTA</th>
           <th>STATUS</th>
-          <th>OUTROS</th>
+          <th>AUTOMÁTICO</th>
 
         </tr>
 
@@ -589,7 +625,7 @@ function createCard(title, headers, rows, indexes){
 
     `;
 
-    headers.forEach((header, idx) => {
+    headers.forEach((header, idx)=>{
 
       const coluna = indexes[idx];
 
@@ -600,13 +636,13 @@ function createCard(title, headers, rows, indexes){
           <td>${header}</td>
 
           <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
+            val(statusRow?.c?.[coluna] || {})
           )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
+            ${val(statusRow?.c?.[coluna] || {})}
           </td>
 
           <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
+            ${val(automaticoRow?.c?.[coluna] || {})}
           </td>
 
         </tr>
@@ -614,7 +650,11 @@ function createCard(title, headers, rows, indexes){
       `;
     });
 
-    html += `</tbody>`;
+    html += `
+
+      </tbody>
+
+    `;
   }
 
   html += `
@@ -628,8 +668,7 @@ function createCard(title, headers, rows, indexes){
   `;
 
   return html;
-}
-  
+}  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -718,37 +757,30 @@ async function loadAll(){
 
     grid.innerHTML =
 
-      createCard(
-
-        "VEÍCULOS",
-
-        [
-          "TRAIL TXN1I89",
-          "CRETA TXJ6F18",
-          "CRETA TXJ6F19",
-          "CRETA TXJ6F20"
-        ],
-
-        geralRows,
-
-        [0,1,2,3]
-      )
+     createCard(
+  "VEÍCULOS",
+  [
+    "TRAIL TXN1I89",
+    "CRETA TXJ6F18",
+    "CRETA TXJ6F19",
+    "CRETA TXJ6F20"
+  ],
+  geralRows,
+  [1,2,3,4]
+)
 
       +
 
-      createCard(
-
-        "MOTORISTAS",
-
-        [
-          "CACIO",
-          "CELSO",
-          "NEI"
-        ],
-
-        geralRows,
-
-        [4,5,6]
+     createCard(
+  "MOTORISTAS",
+  [
+    "CACIO",
+    "CELSO",
+    "NEI"
+  ],
+  geralRows,
+  [5,6,7]
+)
       );
 
     app.appendChild(grid);

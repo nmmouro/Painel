@@ -529,32 +529,46 @@ function createCard(title, headers, rows, indexes){
       const coluna = indexes[idx];
 
       html += `
+  <thead>
+    <tr>
+      <th>INFORMAÇÃO</th>
+      ${headers.map(h => `<th>${h}</th>`).join("")}
+    </tr>
+  </thead>
 
-        <tr>
+  <tbody>
 
-          <td>${header}</td>
+    <tr>
+      <td>STATUS</td>
+      ${indexes.map(coluna => `
+        <td class="${getClass(
+          val(rows[0]?.c?.[coluna] || {v:""})
+        )}">
+          ${val(rows[0]?.c?.[coluna] || {v:""})}
+        </td>
+      `).join("")}
+    </tr>
 
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
+    <tr>
+      <td>ODÔMETRO</td>
+      ${indexes.map(coluna => `
+        <td>
+          ${val(rows[1]?.c?.[coluna] || {v:""})}
+        </td>
+      `).join("")}
+    </tr>
 
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
+    <tr>
+      <td>COMBUSTÍVEL</td>
+      ${indexes.map(coluna => `
+        <td>
+          ${val(rows[2]?.c?.[coluna] || {v:""})}
+        </td>
+      `).join("")}
+    </tr>
 
-          <td>
-            ${val(rows[2]?.c?.[coluna] || {v:""})}
-          </td>
-
-        </tr>
-
-      `;
-    });
-
-    html += `</tbody>`;
-  }
+  </tbody>
+`;
 
   /* ================= MOTORISTAS ================= */
 
@@ -583,28 +597,37 @@ function createCard(title, headers, rows, indexes){
       const coluna = indexes[idx];
 
       html += `
+  <thead>
+    <tr>
+      <th>INFORMAÇÃO</th>
+      ${headers.map(h => `<th>${h}</th>`).join("")}
+    </tr>
+  </thead>
 
-        <tr>
+  <tbody>
 
-          <td>${header}</td>
+    <tr>
+      <td>STATUS</td>
+      ${indexes.map(coluna => `
+        <td class="${getClass(
+          val(rows[0]?.c?.[coluna] || {v:""})
+        )}">
+          ${val(rows[0]?.c?.[coluna] || {v:""})}
+        </td>
+      `).join("")}
+    </tr>
 
-          <td class="${getClass(
-            val(rows[0]?.c?.[coluna] || {v:""})
-          )}">
-            ${val(rows[0]?.c?.[coluna] || {v:""})}
-          </td>
+    <tr>
+      <td>OUTROS</td>
+      ${indexes.map(coluna => `
+        <td>
+          ${val(rows[1]?.c?.[coluna] || {v:""})}
+        </td>
+      `).join("")}
+    </tr>
 
-          <td>
-            ${val(rows[1]?.c?.[coluna] || {v:""})}
-          </td>
-
-        </tr>
-
-      `;
-    });
-
-    html += `</tbody>`;
-  }
+  </tbody>
+`;
 
   html += `
 

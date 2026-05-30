@@ -590,12 +590,11 @@ const getStatusInfo = status =>
 async function fetchSheet(sheet){
 
   const url =
-
-    `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq` +
-
-    `?sheet=${encodeURIComponent(sheet)}` +
-
-    `&tqx=out:json`;
+  `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq` +
+  `?sheet=${encodeURIComponent(sheet)}` +
+  `&tq=select *` +
+  `&headers=0` +
+  `&tqx=out:json`;
 
   const res = await fetch(url);
 

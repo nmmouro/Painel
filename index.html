@@ -448,25 +448,25 @@ function getRowByName(rows,rowName){
 
 function createCard(title, headers, rows, indexes){
 
-  const statusRow =
-    getRowByName(rows,"STATUS");
+ const statusRow =
+  getRowByName(rows,"STATUS");
 
+const odometroRow =
+  getRowByName(rows,"ODÔMETRO")
+  || getRowByName(rows,"ODOMETRO");
+
+const combustivelRow =
+  getRowByName(rows,"COMBUSTÍVEL")
+  || getRowByName(rows,"COMBUSTIVEL");
+
+const automaticoRow =
+  getRowByName(rows,"AUTOMÁTICO")
+  || getRowByName(rows,"AUTOMATICO");
 
 console.log("STATUS",statusRow);
 console.log("ODOMETRO",odometroRow);
 console.log("COMBUSTIVEL",combustivelRow);
 console.log("AUTOMATICO",automaticoRow);
-  
-
-  const odometroRow =
-    getRowByName(rows,"ODÔMETRO");
-
-  const combustivelRow =
-    getRowByName(rows,"COMBUSTÍVEL");
-
-  const automaticoRow =
-  getRowByName(rows,"AUTOMÁTICO")
-  || getRowByName(rows,"AUTOMATICO");
 
   let html = `
 

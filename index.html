@@ -782,12 +782,13 @@ setInterval(updateClock,1000);
 
 /* ================= INIT ================= */
 
-loadAll();
+async function loadAll(){
 
-setInterval(
-  loadAll,
-  CONFIG.REFRESH_INTERVAL
-);
+  const dados = await fetchSheet("GERAL");
+
+  console.log(dados);
+
+}
 
 </script>
 

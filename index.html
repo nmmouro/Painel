@@ -246,18 +246,7 @@ const CONFIG = {
 
 const TABS = [
 
-  { 
-    title:"GERAL",
-    sheet:"GERAL",
-
-    headers:[
-       "TRAIL TXN1I89",
-       "CRETA TXJ6F18",
-       "CRETA TXJ6F19",
-       "CRETA TXJ6F20"
-    ]
-    
-  },
+  { sheet:"GERAL" },
 
   {
     title:"PAINEL",
@@ -315,13 +304,8 @@ const parse = txt =>
     )
   );
 
-const val = c => {
-
-  if(!c) return "";
-
-  return c.f ?? c.v ?? "";
-
-};
+const val = c =>
+  c?.f ?? c?.v ?? "";
 
 /* ================= FETCH ================= */
 
@@ -414,59 +398,96 @@ function renderTable(headers, rows){
   `;
 }
 
+/* ================= TABELAS VERTICAIS ================= */
 
-function getRowByName(rows,rowName){
+function renderVerticalTable(headers, rows, indexes){
 
-  for(const row of rows){
+  let html = `
 
-    const primeiraColuna =
-      row.c?.[0]?.v || "";
+    <div class="table-wrap">
 
-    const texto =
-      String(primeiraColuna)
-      .trim()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g,"")
-      .toUpperCase();
+      <table>
 
-    const busca =
-      rowName
-      .trim()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g,"")
-      .toUpperCase();
+        <thead>
 
-    if(texto === busca){
-      return row;
-    }
-  }
+          <tr>
 
-  return null;
+            <th>VEÍCULOS</th>
+
+            ${rows.map(() => `
+              <th>STATUS</th>
+              <th>ODÔMETRO</th>
+              <th>COMBUSTÍVEL</th>
+            `).join("")}
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+  `;
+
+  headers.forEach((header, colIndex) => {
+
+    html += `
+
+      <tr>
+
+        <th>${header}</th>
+
+    `;
+
+    rows.forEach(row => {
+
+      const base =
+        indexes[colIndex];
+
+      const status =
+        row.c?.[base] || { v:"" };
+
+      const odometro =
+        row.c?.[base + 1] || { v:"" };
+
+      const combustivel =
+        row.c?.[base + 2] || { v:"" };
+
+      html += `
+
+        <td class="${getClass(val(status))}">
+          ${val(status)}
+        </td>
+
+        <td>
+          ${val(odometro)}
+        </td>
+
+        <td>
+          ${val(combustivel)}
+        </td>
+
+      `;
+    });
+
+    html += `</tr>`;
+  });
+
+  html += `
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+  return html;
 }
 
 /* ================= CARD VERTICAL ================= */
 
 function createCard(title, headers, rows, indexes){
-
- const statusRow =
-  getRowByName(rows,"STATUS");
-
-const odometroRow =
-  getRowByName(rows,"ODÔMETRO")
-  || getRowByName(rows,"ODOMETRO");
-
-const combustivelRow =
-  getRowByName(rows,"COMBUSTÍVEL")
-  || getRowByName(rows,"COMBUSTIVEL");
-
-const automaticoRow =
-  getRowByName(rows,"AUTOMÁTICO")
-  || getRowByName(rows,"AUTOMATICO");
-
-console.log("STATUS",statusRow);
-console.log("ODOMETRO",odometroRow);
-console.log("COMBUSTIVEL",combustivelRow);
-console.log("AUTOMATICO",automaticoRow);
 
   let html = `
 
@@ -490,7 +511,7 @@ console.log("AUTOMATICO",automaticoRow);
 
         <tr>
 
-          <th>VEÍCULO</th>
+          <th>VEÍCULOS</th>
           <th>STATUS</th>
           <th>ODÔMETRO</th>
           <th>COMBUSTÍVEL</th>
@@ -503,7 +524,7 @@ console.log("AUTOMATICO",automaticoRow);
 
     `;
 
-    headers.forEach((header, idx)=>{
+    headers.forEach((header, idx) => {
 
       const coluna = indexes[idx];
 
@@ -514,17 +535,17 @@ console.log("AUTOMATICO",automaticoRow);
           <td>${header}</td>
 
           <td class="${getClass(
-            val(statusRow?.c?.[coluna] || {})
+            val(rows[0]?.c?.[coluna] || {v:""})
           )}">
-            ${val(statusRow?.c?.[coluna] || {})}
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
           </td>
 
           <td>
-            ${val(odometroRow?.c?.[coluna] || {})}
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
           </td>
 
           <td>
-            ${val(combustivelRow?.c?.[coluna] || {})}
+            ${val(rows[2]?.c?.[coluna] || {v:""})}
           </td>
 
         </tr>
@@ -532,11 +553,7 @@ console.log("AUTOMATICO",automaticoRow);
       `;
     });
 
-    html += `
-
-      </tbody>
-
-    `;
+    html += `</tbody>`;
   }
 
   /* ================= MOTORISTAS ================= */
@@ -549,9 +566,9 @@ console.log("AUTOMATICO",automaticoRow);
 
         <tr>
 
-          <th>MOTORISTA</th>
+          <th>MOTORISTAS</th>
           <th>STATUS</th>
-          <th>AUTOMÁTICO</th>
+          <th>OUTROS</th>
 
         </tr>
 
@@ -561,7 +578,7 @@ console.log("AUTOMATICO",automaticoRow);
 
     `;
 
-    headers.forEach((header, idx)=>{
+    headers.forEach((header, idx) => {
 
       const coluna = indexes[idx];
 
@@ -572,13 +589,13 @@ console.log("AUTOMATICO",automaticoRow);
           <td>${header}</td>
 
           <td class="${getClass(
-            val(statusRow?.c?.[coluna] || {})
+            val(rows[0]?.c?.[coluna] || {v:""})
           )}">
-            ${val(statusRow?.c?.[coluna] || {})}
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
           </td>
 
           <td>
-            ${val(automaticoRow?.c?.[coluna] || {})}
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
           </td>
 
         </tr>
@@ -586,11 +603,7 @@ console.log("AUTOMATICO",automaticoRow);
       `;
     });
 
-    html += `
-
-      </tbody>
-
-    `;
+    html += `</tbody>`;
   }
 
   html += `
@@ -604,7 +617,8 @@ console.log("AUTOMATICO",automaticoRow);
   `;
 
   return html;
-}  
+}
+  
 /* ================= AUDIO ================= */
 
 let lastHash = "";
@@ -685,9 +699,6 @@ async function loadAll(){
     const geralRows =
       results[0].table.rows || [];
 
-console.log("GERAL", geralRows);
-    
-
     const grid =
       document.createElement("div");
 
@@ -696,30 +707,37 @@ console.log("GERAL", geralRows);
 
     grid.innerHTML =
 
-     createCard(
-  "VEÍCULOS",
-  [
-    "TRAIL TXN1I89",
-    "CRETA TXJ6F18",
-    "CRETA TXJ6F19",
-    "CRETA TXJ6F20"
-  ],
-  geralRows,
-  [1,2,3,4]
-)
+      createCard(
+
+        "VEÍCULOS",
+
+        [
+          "TRAIL TXN1I89",
+          "CRETA TXJ6F18",
+          "CRETA TXJ6F19",
+          "CRETA TXJ6F20"
+        ],
+
+        geralRows,
+
+        [0,1,2,3]
+      )
 
       +
 
-     createCard(
-  "MOTORISTAS",
-  [
-    "CACIO",
-    "CELSO",
-    "NEI"
-  ],
-  geralRows,
-  [5,6,7]
-)
+      createCard(
+
+        "MOTORISTAS",
+
+        [
+          "CACIO",
+          "CELSO",
+          "NEI"
+        ],
+
+        geralRows,
+
+        [4,5,6]
       );
 
     app.appendChild(grid);
@@ -782,13 +800,12 @@ setInterval(updateClock,1000);
 
 /* ================= INIT ================= */
 
-async function loadAll(){
+loadAll();
 
-  const dados = await fetchSheet("GERAL");
-
-  console.log(dados);
-
-}
+setInterval(
+  loadAll,
+  CONFIG.REFRESH_INTERVAL
+);
 
 </script>
 

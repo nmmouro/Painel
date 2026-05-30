@@ -977,7 +977,10 @@ document.getElementById(
 /* ================= INIT ================= */
 
 loadAll();
-
+console.log(geralRows.map(r =>
+    (r.c || []).map(getCellValue)
+  )
+);
 setInterval(
   loadAll,
   CONFIG.REFRESH_INTERVAL

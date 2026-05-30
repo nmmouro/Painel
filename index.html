@@ -457,8 +457,9 @@ function renderVerticalTable(headers, rows, indexes){
       const status =
         row.c?.[base] || { v:"" };
 
-      const odometro =
-        row.c?.[base + 1] || { v:"" };
+      const odometroRow =
+  getRowByName(rows,"ODÔMETRO")
+  || getRowByName(rows,"ODOMETRO");
 
       const combustivel =
         row.c?.[base + 2] || { v:"" };
@@ -497,21 +498,26 @@ function renderVerticalTable(headers, rows, indexes){
 }
 
 
-function getRowByName(rows, rowName){
+function getRowByName(rows,rowName){
 
-  return rows.find(r =>
+  return rows.find(r => {
 
-    String(
+    const texto = String(
       val(r.c?.[0] || {})
     )
     .trim()
-    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toUpperCase();
 
-    ===
+    const busca = rowName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"")
+      .toUpperCase();
 
-    rowName.toUpperCase()
+    return texto === busca;
 
-  );
+  });
 
 }
   
@@ -530,7 +536,8 @@ function createCard(title, headers, rows, indexes){
     getRowByName(rows,"COMBUSTÍVEL");
 
   const automaticoRow =
-    getRowByName(rows,"AUTOMÁTICO");
+  getRowByName(rows,"AUTOMÁTICO")
+  || getRowByName(rows,"AUTOMATICO");
 
   let html = `
 

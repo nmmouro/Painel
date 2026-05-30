@@ -505,27 +505,32 @@ function renderVerticalTable(headers, rows, indexes){
 
 function getRowByName(rows,rowName){
 
-  return rows.find(r => {
+  for(const row of rows){
 
-    const texto = String(
-      val(r.c?.[0] || {})
-    )
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .toUpperCase();
+    const primeiraColuna =
+      row.c?.[0]?.v || "";
 
-    const busca = rowName
+    const texto =
+      String(primeiraColuna)
+      .trim()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g,"")
       .toUpperCase();
 
-    return texto === busca;
+    const busca =
+      rowName
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"")
+      .toUpperCase();
 
-  });
+    if(texto === busca){
+      return row;
+    }
+  }
 
+  return null;
 }
-  
 
 /* ================= CARD VERTICAL ================= */
 
@@ -533,6 +538,13 @@ function createCard(title, headers, rows, indexes){
 
   const statusRow =
     getRowByName(rows,"STATUS");
+
+
+console.log("STATUS",statusRow);
+console.log("ODOMETRO",odometroRow);
+console.log("COMBUSTIVEL",combustivelRow);
+console.log("AUTOMATICO",automaticoRow);
+  
 
   const odometroRow =
     getRowByName(rows,"ODÔMETRO");

@@ -315,8 +315,13 @@ const parse = txt =>
     )
   );
 
-const val = c =>
-  c?.f ?? c?.v ?? "";
+const val = c => {
+
+  if(!c) return "";
+
+  return c.f ?? c.v ?? "";
+
+};
 
 /* ================= FETCH ================= */
 
@@ -755,6 +760,9 @@ async function loadAll(){
 
     const geralRows =
       results[0].table.rows || [];
+
+console.log("GERAL", geralRows);
+    
 
     const grid =
       document.createElement("div");

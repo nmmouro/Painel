@@ -505,143 +505,82 @@ function createCard(title, headers, rows, indexes){
 
   if(title === "VEÍCULOS"){
 
-    html += `
+  html += `
+    <thead>
+      <tr>
+        <th>INFORMAÇÃO</th>
+        ${headers.map(h => `<th>${h}</th>`).join("")}
+      </tr>
+    </thead>
 
-      <thead>
+    <tbody>
 
-        <tr>
+      <tr>
+        <th>STATUS</th>
+        ${indexes.map(coluna => `
+          <td class="${getClass(val(rows[0]?.c?.[coluna] || {v:""}))}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+        `).join("")}
+      </tr>
 
-          <th>VEÍCULOS</th>
-          <th>STATUS</th>
-          <th>ODÔMETRO</th>
-          <th>COMBUSTÍVEL</th>
+      <tr>
+        <th>ODÔMETRO</th>
+        ${indexes.map(coluna => `
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+        `).join("")}
+      </tr>
 
-        </tr>
+      <tr>
+        <th>COMBUSTÍVEL</th>
+        ${indexes.map(coluna => `
+          <td>
+            ${val(rows[2]?.c?.[coluna] || {v:""})}
+          </td>
+        `).join("")}
+      </tr>
 
-      </thead>
-
-      <tbody>
-
-    `;
-
-    headers.forEach((header, idx) => {
-
-      const coluna = indexes[idx];
-
-      html += `
-  <thead>
-    <tr>
-      <th>INFORMAÇÃO</th>
-      ${headers.map(h => `<th>${h}</th>`).join("")}
-    </tr>
-  </thead>
-
-  <tbody>
-
-    <tr>
-      <td>STATUS</td>
-      ${indexes.map(coluna => `
-        <td class="${getClass(
-          val(rows[0]?.c?.[coluna] || {v:""})
-        )}">
-          ${val(rows[0]?.c?.[coluna] || {v:""})}
-        </td>
-      `).join("")}
-    </tr>
-
-    <tr>
-      <td>ODÔMETRO</td>
-      ${indexes.map(coluna => `
-        <td>
-          ${val(rows[1]?.c?.[coluna] || {v:""})}
-        </td>
-      `).join("")}
-    </tr>
-
-    <tr>
-      <td>COMBUSTÍVEL</td>
-      ${indexes.map(coluna => `
-        <td>
-          ${val(rows[2]?.c?.[coluna] || {v:""})}
-        </td>
-      `).join("")}
-    </tr>
-
-  </tbody>
-`;
-
+    </tbody>
+  `;
+}
   /* ================= MOTORISTAS ================= */
 
   if(title === "MOTORISTAS"){
 
-    html += `
-
-      <thead>
-
-        <tr>
-
-          <th>MOTORISTAS</th>
-          <th>STATUS</th>
-          <th>OUTROS</th>
-
-        </tr>
-
-      </thead>
-
-      <tbody>
-
-    `;
-
-    headers.forEach((header, idx) => {
-
-      const coluna = indexes[idx];
-
-      html += `
-  <thead>
-    <tr>
-      <th>INFORMAÇÃO</th>
-      ${headers.map(h => `<th>${h}</th>`).join("")}
-    </tr>
-  </thead>
-
-  <tbody>
-
-    <tr>
-      <td>STATUS</td>
-      ${indexes.map(coluna => `
-        <td class="${getClass(
-          val(rows[0]?.c?.[coluna] || {v:""})
-        )}">
-          ${val(rows[0]?.c?.[coluna] || {v:""})}
-        </td>
-      `).join("")}
-    </tr>
-
-    <tr>
-      <td>OUTROS</td>
-      ${indexes.map(coluna => `
-        <td>
-          ${val(rows[1]?.c?.[coluna] || {v:""})}
-        </td>
-      `).join("")}
-    </tr>
-
-  </tbody>
-`;
-
   html += `
+    <thead>
+      <tr>
+        <th>INFORMAÇÃO</th>
+        ${headers.map(h => `<th>${h}</th>`).join("")}
+      </tr>
+    </thead>
 
-        </table>
+    <tbody>
 
-      </div>
+      <tr>
+        <th>STATUS</th>
+        ${indexes.map(coluna => `
+          <td class="${getClass(val(rows[0]?.c?.[coluna] || {v:""}))}">
+            ${val(rows[0]?.c?.[coluna] || {v:""})}
+          </td>
+        `).join("")}
+      </tr>
 
-    </section>
+      <tr>
+        <th>OUTROS</th>
+        ${indexes.map(coluna => `
+          <td>
+            ${val(rows[1]?.c?.[coluna] || {v:""})}
+          </td>
+        `).join("")}
+      </tr>
 
+    </tbody>
   `;
-
-  return html;
 }
-  
+   
 /* ================= AUDIO ================= */
 
 let lastHash = "";

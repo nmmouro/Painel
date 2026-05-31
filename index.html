@@ -449,19 +449,19 @@ const SHEET_ID =
 const TABS = [
 
   {
-{
     id:"veiculos",
     title:"VEÍCULOS",
     sheet:"VEÍCULOS",
 
     headers:[
-    "TXN1I89",
-    "TXJ6F18",
-    "TXJ6F19",
-    "TXJ6F20"
-  ]
-},
-    
+      "TXN1I89",
+      "TXJ6F18",
+      "TXJ6F19",
+      "TXJ6F20"
+    ]
+  },
+
+  {
     id:"painel",
     title:"PAINEL",
     sheet:"PAINEL",
@@ -507,8 +507,9 @@ const TABS = [
       "Status"
     ]
   }
-];
 
+];
+  
 /* ================= STATUS CONFIG ================= */
 
 const STATUS = {
@@ -729,7 +730,17 @@ function renderEmpregados(rows){
   
 function renderVeiculos(rows){
 
-  if(!rows.length) return "";
+  if(rows.length < 3){
+
+    return `
+      <div style="
+        padding:20px;
+        text-align:center;
+      ">
+        Nenhum dado disponível.
+      </div>
+    `;
+  }
 
   return `
     <table>
@@ -746,20 +757,20 @@ function renderVeiculos(rows){
       <tbody>
 
         <tr>
-          ${rows[0].c.map(c=>`
+          ${(rows[0].c || []).map(c => `
             <td><strong>${getCell(c)}</strong></td>
           `).join("")}
         </tr>
 
         <tr>
-          ${rows[1].c.map(c=>`
-            <td>${getCell(c)} km</td>
+          ${(rows[1].c || []).map(c => `
+            <td>${getCell(c)}</td>
           `).join("")}
         </tr>
 
         <tr>
-          ${rows[2].c.map(c=>`
-            <td>${getCell(c)} L</td>
+          ${(rows[2].c || []).map(c => `
+            <td>⛽ ${getCell(c)}</td>
           `).join("")}
         </tr>
 
@@ -767,8 +778,7 @@ function renderVeiculos(rows){
 
     </table>
   `;
-}
-  
+}  
 
 /* ================= LOAD ================= */
 
@@ -831,9 +841,9 @@ async function loadAll(){
 
       app.appendChild(section);
 
-      if(index === 0){
-        renderEmpregados(rows);
-      }
+     if(tab.id === "painel"){
+  renderEmpregados(rows);
+}
     });
 
   }catch(err){

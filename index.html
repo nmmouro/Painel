@@ -752,6 +752,29 @@ function renderEmpregados(rows){
 
 }
 
+
+function formatStatus(valor=""){
+
+  const texto = String(valor).toUpperCase();
+
+  if(texto.includes("LIVRE")){
+    return '<span class="livre">🟢 LIVRE</span>';
+  }
+
+  if(texto.includes("OCUPADO")){
+    return '<span class="ocupado">🔴 OCUPADO</span>';
+  }
+
+  if(texto.includes("MANUTENÇÃO")){
+    return '<span class="manutenção">🔵 MANUTENÇÃO</span>';
+  }
+
+  return valor;
+}
+
+
+  
+
 /* ================= VEÍCULOS ================= */
   
 function renderVeiculos(rows){
@@ -785,7 +808,7 @@ function renderVeiculos(rows){
               </td>
 
               <td>
-                ${v[1] || ""}
+                ${formatStatus(v[1])}
               </td>
 
               <td>
@@ -843,7 +866,7 @@ function renderMotoristas(rows){
               </td>
 
               <td>
-                ${v[1] || ""}
+                ${formatStatus(v[1])}
               </td>
 
               <td>

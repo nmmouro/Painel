@@ -670,113 +670,35 @@ return `
 
 /* ================= STATUS EMPREGADOS ================= */
 
-function renderEmpregados(rows){
-
-  const nomes = [
-    "CACIO",
-    "CELSO",
-    "NEI"
-  ];
-
-  const usados = {};
-
-  nomes.forEach(n => usados[n] = false);
-
-  rows.forEach(r=>{
-
-    const cells =
-      (r.c || []).map(getCell);
-
-    const status =
-      String(cells.at(-1) || "")
-      .toLowerCase();
-
-    if(!status.includes("andamento"))
-      return;
-
-    const text =
-      JSON.stringify(r).toUpperCase();
-
-    nomes.forEach(nome=>{
-
-      if(text.includes(nome)){
-        usados[nome] = true;
-      }
-    });
-  });
-
-  document.getElementById(
-    "status-empregados"
-  ).innerHTML = nomes.map(nome => `
-
-    <span class="
-      badge
-      ${usados[nome]
-        ? "ocupado"
-        : "livre"}
-    ">
-
-      ${nome}
-      (${usados[nome]
-        ? "OCUPADO"
-        : "LIVRE"})
-
-    </span>
-
-  `).join("");
-}
-  
-/* ================= VEÍCULOS ================= */
-  
 function renderVeiculos(rows){
-
-  console.log(
-  rows[0].c.map(getCell)
-);
-
-  if(rows.length < 3){
-
-    return `
-      <div style="
-        padding:20px;
-        text-align:center;
-      ">
-        Nenhum dado disponível.
-      </div>
-    `;
-  }
 
   return `
     <table>
 
       <thead>
         <tr>
-          <th>TXN1I89</th>
-          <th>TXJ6F18</th>
-          <th>TXJ6F19</th>
-          <th>TXJ6F20</th>
+          <th>Placa</th>
+          <th>Status</th>
+          <th>Odômetro</th>
+          <th>Combustível</th>
         </tr>
       </thead>
 
       <tbody>
 
-        <tr>
-          ${(rows[1].c || []).map(c => `
-            <td><strong>${getCell(c)}</strong></td>
-          `).join("")}
-        </tr>
+        ${rows.map(row => {
 
-        <tr>
-          ${(rows[2].c || []).map(c => `
-            <td>${getCell(c)}</td>
-          `).join("")}
-        </tr>
+          const v = (row.c || []).map(getCell);
 
-        <tr>
-          ${(rows[3].c || []).map(c => `
-            <td>⛽ ${getCell(c)}</td>
-          `).join("")}
-        </tr>
+          return `
+            <tr>
+              <td><strong>${v[0] || ""}</strong></td>
+              <td>${v[1] || ""}</td>
+              <td>${v[2] || ""} km</td>
+              <td>⛽ ${v[3] || ""}</td>
+            </tr>
+          `;
+        }).join("")}
 
       </tbody>
 

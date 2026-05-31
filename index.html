@@ -670,9 +670,68 @@ return `
 
 /* ================= STATUS EMPREGADOS ================= */
 
+function renderEmpregados(rows){
+
+  const nomes = [
+    "CACIO",
+    "CELSO",
+    "NEI"
+  ];
+
+  const usados = {};
+
+  nomes.forEach(nome => {
+    usados[nome] = false;
+  });
+
+  rows.forEach(row => {
+
+    const valores =
+      (row.c || []).map(getCell);
+
+    const status =
+      String(valores.at(-1) || "")
+      .toLowerCase();
+
+    if(!status.includes("andamento")){
+      return;
+    }
+
+    const texto =
+      JSON.stringify(valores).toUpperCase();
+
+    nomes.forEach(nome => {
+
+      if(texto.includes(nome)){
+        usados[nome] = true;
+      }
+
+    });
+
+  });
+
+  document.getElementById(
+    "status-empregados"
+  ).innerHTML = nomes.map(nome => `
+
+    <span class="
+      badge
+      ${usados[nome] ? "ocupado" : "livre"}
+    ">
+      ${nome}
+      (${usados[nome] ? "OCUPADO" : "LIVRE"})
+    </span>
+
+  `).join("");
+
+}
+
+/* ================= VEÍCULOS ================= */
+  
 function renderVeiculos(rows){
 
   return `
+
     <table>
 
       <thead>
@@ -688,23 +747,42 @@ function renderVeiculos(rows){
 
         ${rows.map(row => {
 
-          const v = (row.c || []).map(getCell);
+          const v =
+            (row.c || []).map(getCell);
 
           return `
+
             <tr>
-              <td><strong>${v[0] || ""}</strong></td>
-              <td>${v[1] || ""}</td>
-              <td>${v[2] || ""} km</td>
-              <td>⛽ ${v[3] || ""}</td>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${v[1] || ""}
+              </td>
+
+              <td>
+                ${v[2] || ""} km
+              </td>
+
+              <td>
+                ⛽ ${v[3] || ""}
+              </td>
+
             </tr>
+
           `;
+
         }).join("")}
 
       </tbody>
 
     </table>
+
   `;
-}  
+
+}
 
 /* ================= LOAD ================= */
 

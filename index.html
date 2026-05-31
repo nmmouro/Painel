@@ -965,8 +965,19 @@ results.forEach((data,index)=>{
   app.appendChild(section);
 
 
+  if(tab.id === "painel"){
+  renderEmpregados(rows);
+}
+    });
 
-});
+  }catch(err){
+
+    console.error(err);
+
+    app.innerHTML =
+      "<div>Erro ao carregar dados.</div>";
+  }
+}
 
 /* ================= CLOCK ================= */
 

@@ -589,17 +589,22 @@ function getStatusIcon(status){
 
 async function fetchSheet(sheet){
 
+  console.log("LENDO ABA:", sheet);
+
   const url =
-
     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
-
     `?sheet=${encodeURIComponent(sheet)}` +
-
     `&tqx=out:json`;
 
   const res = await fetch(url);
 
-  return parseGviz(await res.text());
+  const txt = await res.text();
+
+  const data = parseGviz(txt);
+
+  console.log(sheet, data.table.rows);
+
+  return data;
 }
 
 /* ================= TABLE ================= */

@@ -378,6 +378,12 @@ tbody tr:nth-child(even) td{
 
   font-size:12px;
    }
+
+  .dual-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
   
 }
 
@@ -460,6 +466,19 @@ const TABS = [
       "TXJ6F20"
     ]
   },
+
+  {
+  id:"motoristas",
+  title:"MOTORISTAS",
+  sheet:"MOTORISTAS",
+
+  headers:[
+    "Motorista",
+    "Status",
+    "Condição",
+    
+  ]
+},
 
   {
     id:"painel",
@@ -784,6 +803,64 @@ function renderVeiculos(rows){
 
 }
 
+/* ================= MOTORISTAS ================= */
+
+function renderMotoristas(rows){
+
+  return `
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Motorista</th>
+          <th>Status</th>
+          <th>CNH</th>
+          <th>Validade</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const v =
+            (row.c || []).map(getCell);
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${v[1] || ""}
+              </td>
+
+              <td>
+                ${v[2] || ""}
+              </td>
+
+              <td>
+                ${v[3] || ""}
+              </td>
+
+            </tr>
+
+          `;
+
+        }).join("")}
+
+      </tbody>
+
+    </table>
+
+  `;
+}
+  
+
 /* ================= LOAD ================= */
 
 let lastHash = "";
@@ -817,33 +894,77 @@ async function loadAll(){
     firstLoad = false;
     lastHash = hash;
 
-    app.innerHTML = "";
+app.innerHTML = "";
 
-    results.forEach((data,index)=>{
+/* VEÍCULOS + MOTORISTAS */
 
-      const tab = TABS[index];
+const veiculosIndex =
+  TABS.findIndex(t => t.id === "veiculos");
 
-      const rows =
-        data.table.rows || [];
+const motoristasIndex =
+  TABS.findIndex(t => t.id === "motoristas");
 
-      const section =
-        document.createElement("section");
+const dual = document.createElement("div");
+dual.className = "dual-cards";
 
-      section.className = "card";
+[veiculosIndex,motoristasIndex].forEach(index=>{
 
-      section.innerHTML = `
+  const tab = TABS[index];
+  const rows = results[index].table.rows || [];
 
-  <h2>${tab.title}</h2>
+  const section =
+    document.createElement("section");
 
-  ${
-    tab.id === "veiculos"
-      ? renderVeiculos(rows)
-      : renderTable(tab.headers, rows)
-  }
+  section.className = "card";
 
-`;
+  section.innerHTML = `
 
-      app.appendChild(section);
+    <h2>${tab.title}</h2>
+
+    ${
+      tab.id === "veiculos"
+        ? renderVeiculos(rows)
+        : renderMotoristas(rows)
+    }
+
+  `;
+
+  dual.appendChild(section);
+
+});
+
+app.appendChild(dual);
+
+/* DEMAIS TABELAS */
+
+results.forEach((data,index)=>{
+
+  const tab = TABS[index];
+
+  if(
+    tab.id === "veiculos" ||
+    tab.id === "motoristas"
+  ) return;
+
+  const rows =
+    data.table.rows || [];
+
+  const section =
+    document.createElement("section");
+
+  section.className = "card";
+
+  section.innerHTML = `
+
+    <h2>${tab.title}</h2>
+
+    ${renderTable(tab.headers, rows)}
+
+  `;
+
+  app.appendChild(section);
+
+
 
      if(tab.id === "painel"){
   renderEmpregados(rows);

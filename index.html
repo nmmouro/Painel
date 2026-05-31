@@ -735,57 +735,16 @@ function renderEmpregados(rows){
   
 function renderVeiculos(rows){
 
-
-  if(rows.length < 3){
-
-    return `
-      <div style="
-        padding:20px;
-        text-align:center;
-      ">
-        Nenhum dado disponível.
-      </div>
-    `;
-  }
+  console.log(
+    JSON.stringify(rows,null,2)
+  );
 
   return `
-    <table>
-
-      <thead>
-        <tr>
-          <th>TXN1I89</th>
-          <th>TXJ6F18</th>
-          <th>TXJ6F19</th>
-          <th>TXJ6F20</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <tr>
-          ${(rows[1].c || []).map(c => `
-            <td><strong>${getCell(c)}</strong></td>
-          `).join("")}
-        </tr>
-
-        <tr>
-          ${(rows[2].c || []).map(c => `
-            <td>${getCell(c)}</td>
-          `).join("")}
-        </tr>
-
-        <tr>
-          ${(rows[3].c || []).map(c => `
-            <td>⛽ ${getCell(c)}</td>
-          `).join("")}
-        </tr>
-
-      </tbody>
-
-    </table>
+    <pre>
+${JSON.stringify(rows,null,2)}
+    </pre>
   `;
-}  
-
+}
 /* ================= LOAD ================= */
 
 let lastHash = "";

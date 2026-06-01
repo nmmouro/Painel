@@ -399,6 +399,11 @@ tbody tr:nth-child(even) td{
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
+
+  .card-resumo{
+  max-height:260px;
+  overflow-y:auto;
+}
   
 }
 
@@ -475,10 +480,10 @@ const TABS = [
     sheet:"VEÍCULOS",
 
     headers:[
-      "TXN1I89",
-      "TXJ6F18",
-      "TXJ6F19",
-      "TXJ6F20"
+      "TRAIL TXN1I89",
+      "CRETA TXJ6F18",
+      "CRETA TXJ6F19",
+      "CRETA TXJ6F20"
     ]
   },
 
@@ -953,7 +958,7 @@ dual.className = "dual-cards";
     tab.id === "veiculos" ||
     tab.id === "motoristas"
     ? "card card-resumo"
-    : "card";;
+    : "card";
 
   section.innerHTML = `
 

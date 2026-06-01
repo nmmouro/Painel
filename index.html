@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="pt-BR">
 
@@ -21,8 +22,10 @@
   --table-alt:#0c1d40;
   --header:#2c4078;
   --border:#1e2f5c;
+
   --text:#ffffff;
   --muted:#9fb3ff;
+
   --green:#00ff9c;
   --yellow:#ffcc00;
   --red:#ff4d4d;
@@ -241,9 +244,6 @@ main{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
-
-    max-height:260px;
-  overflow-y:auto;
 }
 
 /* ================= TABLE ================= */
@@ -948,11 +948,7 @@ dual.className = "dual-cards";
   const section =
     document.createElement("section");
 
-  section.className =
-    tab.id === "veiculos" ||
-    tab.id === "motoristas"
-    ? "card card-resumo"
-    : "card";;
+  section.className = "card";
 
   section.innerHTML = `
 
@@ -1115,3 +1111,4 @@ setInterval(loadAll,30000);
 
 </body>
 </html>
+
